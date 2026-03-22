@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 from unittest.mock import patch
 
-from app.commands import config_cmd, help_cmd, open_cmd, search
+from app.commands import config_cmd, help_cmd, note_cmd, open_cmd, search
 
 
 class TestSearchCommand:
@@ -100,3 +101,54 @@ class TestHelpCommand:
         help_cmd.handle("")
         data = json.loads(capsys.readouterr().out)
         assert all(not it["valid"] for it in data["items"])
+
+
+class TestNoteCommand:
+    def test_missing_directory_shows_error(self, capsys, monkeypatch):
+        monkeypatch.setenv("NOTE_TEMPLATES_DIR", "/nonexistent/path")
+        note_cmd.handle("")
+        data = json.loads(capsys.readouterr().out)
+        assert "not found" in data["items"][0]["title"].lower()
+        assert data["items"][0]["valid"] is False
+
+    def test_empty_directory_shows_error(self, capsys, tmp_path: Path, monkeypatch):
+        monkeypatch.setenv("NOTE_TEMPLATES_DIR", str(tmp_path))
+        note_cmd.handle("")
+        data = json.loads(capsys.readouterr().out)
+        assert "No templates" in data["items"][0]["title"]
+
+    def test_lists_md_files(self, capsys, tmp_path: Path, monkeypatch):
+        monkeypatch.setenv("NOTE_TEMPLATES_DIR", str(tmp_path))
+        (tmp_path / "article.md").touch()
+        (tmp_path / "review.md").touch()
+        (tmp_path / "notes.txt").touch()  # should be ignored
+        note_cmd.handle("")
+        data = json.loads(capsys.readouterr().out)
+        titles = [it["title"] for it in data["items"]]
+        assert "article" in titles
+        assert "review" in titles
+        assert len(titles) == 2
+
+    def test_filter_by_query(self, capsys, tmp_path: Path, monkeypatch):
+        monkeypatch.setenv("NOTE_TEMPLATES_DIR", str(tmp_path))
+        (tmp_path / "book-review.md").touch()
+        (tmp_path / "travel-log.md").touch()
+        note_cmd.handle("book")
+        data = json.loads(capsys.readouterr().out)
+        assert len(data["items"]) == 1
+        assert data["items"][0]["title"] == "book-review"
+
+    def test_no_match_shows_error(self, capsys, tmp_path: Path, monkeypatch):
+        monkeypatch.setenv("NOTE_TEMPLATES_DIR", str(tmp_path))
+        (tmp_path / "article.md").touch()
+        note_cmd.handle("xyz")
+        data = json.loads(capsys.readouterr().out)
+        assert "No templates" in data["items"][0]["title"]
+
+    def test_item_arg_is_full_path(self, capsys, tmp_path: Path, monkeypatch):
+        monkeypatch.setenv("NOTE_TEMPLATES_DIR", str(tmp_path))
+        md = tmp_path / "my-template.md"
+        md.touch()
+        note_cmd.handle("")
+        data = json.loads(capsys.readouterr().out)
+        assert data["items"][0]["arg"] == str(md)

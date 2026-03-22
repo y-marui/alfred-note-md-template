@@ -33,6 +33,46 @@
 - Python 3.9+
 - [pre-commit](https://pre-commit.com/)（セキュリティフック用）
 
+## セットアップ（note.com テンプレート貼り付け）
+
+このワークフローは macOS クリップボードへの画像書き込みに `pyobjc-framework-Cocoa` が必要です。
+以下のどちらかの方法でインストールし、Alfred のワークフロー設定で
+`NOTE_PYTHON_BACKEND` 変数を対応する値に設定してください。
+
+### 方法 A — uv（推奨・グローバルインストール不要）
+
+1. [uv](https://docs.astral.sh/uv/getting-started/installation/) をインストール:
+   ```bash
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
+2. `NOTE_PYTHON_BACKEND` を `uv` に設定（デフォルト値）。
+   初回実行時に uv が pyobjc を自動ダウンロード・キャッシュします。
+
+### 方法 B — グローバル pip
+
+1. システムの Python にインストール:
+   ```bash
+   pip3 install pyobjc-framework-Cocoa
+   ```
+2. `NOTE_PYTHON_BACKEND` を `global` に設定。
+
+### テンプレートディレクトリ
+
+`NOTE_TEMPLATES_DIR` に `.md` テンプレートを置くフォルダのパスを設定してください
+（デフォルト: `~/Documents/Note Templates`）。
+
+テンプレート形式 — 標準 Markdown の画像記法をそのまま使えます:
+
+```markdown
+# 記事タイトル
+
+はじめにのテキスト。
+
+![画像キャプション](./images/photo.png)
+
+画像の後のテキスト。
+```
+
 ## クイックスタート（開発者）
 
 ```bash

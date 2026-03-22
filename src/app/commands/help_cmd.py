@@ -9,6 +9,7 @@ from alfred.response import item, output
 
 _COMMANDS = [
     ("search <query>", "Search for items  (default command)", "wf search "),
+    ("note [query]", "List templates and paste to note.com", "wf note "),
     ("open <name>", "Open a named shortcut", "wf open "),
     ("config", "View or reset configuration", "wf config"),
     ("help", "Show this help", "wf help"),

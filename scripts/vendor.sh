@@ -17,10 +17,25 @@ if [[ ! -f "$REPO_ROOT/requirements.txt" ]]; then
   exit 0
 fi
 
-pip3 install \
-  --quiet \
-  --requirement "$REPO_ROOT/requirements.txt" \
-  --target "$VENDOR_DIR" \
-  --upgrade
+# Skip if requirements.txt contains no installable lines (only comments/blanks)
+if ! grep -qE '^[^#[:space:]]' "$REPO_ROOT/requirements.txt"; then
+  echo "  requirements.txt has no packages - skipping vendor install"
+  exit 0
+fi
+
+# Use uv if available (no venv required); fall back to pip3 --target
+if command -v uv >/dev/null 2>&1; then
+  uv pip install \
+    --quiet \
+    --requirement "$REPO_ROOT/requirements.txt" \
+    --target "$VENDOR_DIR" \
+    --upgrade
+else
+  pip3 install \
+    --quiet \
+    --requirement "$REPO_ROOT/requirements.txt" \
+    --target "$VENDOR_DIR" \
+    --upgrade
+fi
 
 echo "✓ Vendor install complete"

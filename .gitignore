@@ -44,3 +44,4 @@ htmlcov/
 # Secrets (never commit these)
 .env
 *.key
+uv.lock

@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>bundleid</key>
-	<string>com.example.alfred-workflow-template</string>
+	<string>com.example.alfred-note-md-template</string>
 	<key>connections</key>
 	<dict>
 		<key>36381EAF-63DA-4000-AED5-AF6DAF671396</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>D90DBB99-FC05-4BE8-B79B-C4DFD1FE55F9</string>
+				<string>B2C3D4E5-F6A7-4890-BCDE-F01234567891</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -21,13 +21,13 @@
 		</array>
 	</dict>
 	<key>createdby</key>
-	<string>Your Name</string>
+	<string>Yukihiro Marui</string>
 	<key>description</key>
-	<string>Alfred Workflow Template</string>
+	<string>Paste markdown templates with images into note.com editor</string>
 	<key>disabled</key>
 	<false/>
 	<key>name</key>
-	<string>Workflow Template</string>
+	<string>note.com Template Paste</string>
 	<key>objects</key>
 	<array>
 		<dict>
@@ -38,7 +38,7 @@
 				<key>alfredfiltersresultsmatchmode</key>
 				<integer>0</integer>
 				<key>argumenttreatemptyqueryasnil</key>
-				<true/>
+				<false/>
 				<key>argumenttrimmode</key>
 				<integer>0</integer>
 				<key>argumenttype</key>
@@ -46,7 +46,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>keyword</key>
-				<string>wf</string>
+				<string>note</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -56,21 +56,21 @@
 				<key>queuemode</key>
 				<integer>1</integer>
 				<key>runningsubtext</key>
-				<string>Loading…</string>
+				<string>Loading templates…</string>
 				<key>script</key>
-				<string>python3 scripts/entry.py "$1"</string>
+				<string>python3 scripts/entry.py "note $1"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
 				<string></string>
 				<key>subtext</key>
-				<string>Search or configure</string>
+				<string>Select a template to paste into note.com</string>
 				<key>title</key>
-				<string>Workflow Template</string>
+				<string>note.com Template</string>
 				<key>type</key>
 				<integer>0</integer>
 				<key>withspace</key>
-				<true/>
+				<false/>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.input.scriptfilter</string>
@@ -82,26 +82,51 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>browser</key>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string>export PATH="$PATH:/usr/local/bin:/opt/homebrew/bin:$HOME/.local/bin:$HOME/.cargo/bin"
+if [ "${NOTE_PYTHON_BACKEND:-uv}" = "global" ]; then
+    python3 scripts/paste_to_note.py "$1"
+else
+    uv run --with pyobjc-framework-Cocoa scripts/paste_to_note.py "$1"
+fi</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
 				<string></string>
-				<key>spaces</key>
-				<string></string>
-				<key>url</key>
-				<string>{query}</string>
-				<key>utf8</key>
-				<true/>
+				<key>type</key>
+				<integer>0</integer>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.action.openurl</string>
+			<string>alfred.workflow.action.script</string>
 			<key>uid</key>
-			<string>D90DBB99-FC05-4BE8-B79B-C4DFD1FE55F9</string>
+			<string>B2C3D4E5-F6A7-4890-BCDE-F01234567891</string>
 		</dict>
 	</array>
 	<key>readme</key>
-	<string></string>
+	<string>Paste markdown templates (including images) into note.com editor.
+
+Setup:
+1. Choose a Python backend (NOTE_PYTHON_BACKEND workflow variable):
+   - "uv" (default): install uv from https://astral.sh/uv — no global pip install needed
+   - "global": run `pip3 install pyobjc-framework-Cocoa` in your system Python
+2. Set NOTE_TEMPLATES_DIR to your templates folder (default: ~/Documents/Note Templates)
+3. Create .md files using standard markdown image syntax: ![caption](./images/photo.png)
+4. Open note.com editor in your browser
+5. Trigger Alfred with keyword "note", select a template, press Enter</string>
+	<key>variables</key>
+	<dict>
+		<key>NOTE_PYTHON_BACKEND</key>
+		<string>uv</string>
+		<key>NOTE_TEMPLATES_DIR</key>
+		<string></string>
+	</dict>
 	<key>version</key>
 	<string>0.1.0</string>
 	<key>webaddress</key>
-	<string>https://github.com/yourname/your-workflow</string>
+	<string>https://github.com/y-marui/alfred-note-md-template</string>
 </dict>
 </plist>
