@@ -7,7 +7,7 @@ on:
       - ".github/workflows/dev-charter-check.yml"
       - "docs/dev-charter/VERSION"
   schedule:
-    - cron: "40 3 * * 1"  # Every Monday at 03:40 UTC
+    - cron: "47 4 * * 1"  # Every Mon 04:47 UTC
   workflow_dispatch:
 
 permissions:
