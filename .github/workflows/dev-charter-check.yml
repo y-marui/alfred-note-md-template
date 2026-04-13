@@ -1,0 +1,21 @@
+name: Dev Charter
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/dev-charter-check.yml"
+      - "docs/dev-charter/VERSION"
+  schedule:
+    - cron: "40 3 * * 1"  # Every Monday at 03:40 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check:
+    uses: y-marui/dev-charter/.github/workflows/check-charter.yml@main
+    with:
+      prefix: docs/dev-charter
