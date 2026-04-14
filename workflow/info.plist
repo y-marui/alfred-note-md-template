@@ -88,10 +88,10 @@
 				<integer>0</integer>
 				<key>script</key>
 				<string>export PATH="$PATH:/usr/local/bin:/opt/homebrew/bin:$HOME/.local/bin:$HOME/.cargo/bin"
-if [ "${NOTE_PYTHON_BACKEND:-uv}" = "global" ]; then
-    python3 scripts/paste_to_note.py "$1"
-else
+if [ "${NOTE_USE_UV:-1}" = "1" ]; then
     uv run --with pyobjc-framework-Cocoa scripts/paste_to_note.py "$1"
+else
+    python3 scripts/paste_to_note.py "$1"
 fi</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
@@ -109,20 +109,51 @@ fi</string>
 	<key>readme</key>
 	<string>Paste markdown templates (including images) into note.com editor.
 
-Setup:
-1. Choose a Python backend (NOTE_PYTHON_BACKEND workflow variable):
-   - "uv" (default): install uv from https://astral.sh/uv — no global pip install needed
-   - "global": run `pip3 install pyobjc-framework-Cocoa` in your system Python
-2. Set NOTE_TEMPLATES_DIR to your templates folder (default: ~/Documents/Note Templates)
-3. Create .md files using standard markdown image syntax: ![caption](./images/photo.png)
-4. Open note.com editor in your browser
-5. Trigger Alfred with keyword "note", select a template, press Enter</string>
+Configuration (Alfred Preferences > Workflows > Configure Workflow):
+- Use uv if available (NOTE_USE_UV): checked by default.
+  Requires uv (https://astral.sh/uv). Uncheck to use system Python instead
+  (requires: pip3 install pyobjc-framework-Cocoa).
+- Templates Directory (NOTE_TEMPLATES_DIR): path to your .md templates folder
+  (default: ~/Documents/Note Templates).
+
+Usage:
+1. Create .md files in your templates folder using standard markdown image syntax:
+   ![caption](./images/photo.png)
+2. Open note.com editor in your browser
+3. Trigger Alfred with keyword "note", select a template, press Enter</string>
+	<key>configuration</key>
+	<array>
+		<dict>
+			<key>description</key>
+			<string>When a non-standard Python library is needed, use uv if it is available. Requires uv (https://astral.sh/uv). Uncheck to use system Python (requires: pip3 install pyobjc-framework-Cocoa).</string>
+			<key>required</key>
+			<false/>
+			<key>title</key>
+			<string>Use uv if available</string>
+			<key>type</key>
+			<integer>2</integer>
+			<key>variable</key>
+			<string>NOTE_USE_UV</string>
+		</dict>
+		<dict>
+			<key>description</key>
+			<string>Path to the folder containing your .md template files. Leave empty to use the default: ~/Documents/Note Templates</string>
+			<key>required</key>
+			<false/>
+			<key>title</key>
+			<string>Templates Directory</string>
+			<key>type</key>
+			<integer>0</integer>
+			<key>variable</key>
+			<string>NOTE_TEMPLATES_DIR</string>
+		</dict>
+	</array>
 	<key>variables</key>
 	<dict>
-		<key>NOTE_PYTHON_BACKEND</key>
-		<string>uv</string>
 		<key>NOTE_TEMPLATES_DIR</key>
 		<string></string>
+		<key>NOTE_USE_UV</key>
+		<integer>1</integer>
 	</dict>
 	<key>version</key>
 	<string>0.1.0</string>
