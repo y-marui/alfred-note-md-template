@@ -18,10 +18,11 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
-          cache: pip
+
+      - uses: astral-sh/setup-uv@v5
 
       - name: Install dev dependencies
-        run: pip install -e ".[dev]"
+        run: uv sync
 
       - name: Run pre-commit (all hooks including gitleaks)
         uses: pre-commit/action@v3.0.1
@@ -35,26 +36,24 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
-          cache: pip
+
+      - uses: astral-sh/setup-uv@v5
 
       - name: Install dev dependencies
-        run: pip install -e ".[dev]"
+        run: uv sync
 
       - name: Ruff lint
-        run: ruff check src/ tests/
-
-      - name: Black format check
-        run: black --check src/ tests/
+        run: uv run ruff check src/ tests/
 
       - name: Mypy type check
-        run: mypy src/
+        run: uv run mypy src/
 
   test:
     name: Test (Python ${{ matrix.python-version }})
     runs-on: macos-latest
     strategy:
       matrix:
-        python-version: ["3.9", "3.11", "3.12"]
+        python-version: ["3.11", "3.12", "3.13"]
 
     steps:
       - uses: actions/checkout@v6
@@ -62,13 +61,14 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
-          cache: pip
+
+      - uses: astral-sh/setup-uv@v5
 
       - name: Install dev dependencies
-        run: pip install -e ".[dev]"
+        run: uv sync
 
       - name: Run tests
-        run: pytest --tb=short
+        run: uv run pytest --tb=short
 
       - name: Upload coverage (Python 3.11 only)
         if: matrix.python-version == '3.11'
@@ -88,7 +88,8 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
-          cache: pip
+
+      - uses: astral-sh/setup-uv@v5
 
       - name: Build .alfredworkflow
         run: ./scripts/build.sh

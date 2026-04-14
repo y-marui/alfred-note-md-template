@@ -14,7 +14,25 @@ ENTRY="$REPO_ROOT/workflow/scripts/entry.py"
 
 QUERY="${1:-}"
 
-# Make src/ importable without `pip install -e .`
+# ---------------------------------------------------------------------------
+# Read use_uv from the config builder default (info.plist variables).
+# Alfred sets this as an env var at runtime; dev.sh simulates that here.
+# ---------------------------------------------------------------------------
+use_uv=$(python3 -c "
+import plistlib, pathlib
+d = plistlib.loads(pathlib.Path('$REPO_ROOT/workflow/info.plist').read_bytes())
+entry = next((e for e in d.get('userconfigurationconfig', []) if e['variable'] == 'use_uv'), {})
+print(1 if entry.get('config', {}).get('default', True) else 0)
+" 2>/dev/null || echo 1)
+export use_uv
+
+if [[ "$use_uv" == "1" ]] && command -v uv &>/dev/null; then
+  PYTHON_CMD="uv run python"
+else
+  PYTHON_CMD="python3"
+fi
+
+# Make src/ importable without installing the package
 # In the packaged workflow, entry.py adds workflow_root/src/ to sys.path.
 # During development, workflow/src/ does not exist – the real source is at
 # repo_root/src/, so we set PYTHONPATH explicitly.
@@ -36,7 +54,7 @@ echo "  Query: \"$QUERY\""
 echo "─────────────────────────────────────"
 
 if command -v jq &>/dev/null; then
-  python3 "$ENTRY" "$QUERY" | jq .
+  $PYTHON_CMD "$ENTRY" "$QUERY" | jq .
 else
-  python3 "$ENTRY" "$QUERY"
+  $PYTHON_CMD "$ENTRY" "$QUERY"
 fi

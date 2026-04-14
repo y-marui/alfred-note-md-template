@@ -16,7 +16,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Union
+from typing import TypeAlias
 
 
 @dataclass
@@ -35,7 +35,7 @@ class CaptionBlock:
     text: str
 
 
-Block = Union[TextBlock, ImageBlock, CaptionBlock]
+Block: TypeAlias = TextBlock | ImageBlock | CaptionBlock
 
 _IMAGE_PATTERN = re.compile(r"!\[([^\]]*)\]\(([^)]+)\)")
 # Matches a single line wrapped in * or _ (italic syntax)

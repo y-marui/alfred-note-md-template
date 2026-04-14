@@ -4,7 +4,7 @@ Usage in Alfred:  note
                   note <query>
 
 Templates are read from the directory configured via the
-``NOTE_TEMPLATES_DIR`` Alfred workflow variable (or environment variable).
+``templates_dir`` Alfred workflow variable (config builder).
 Default: ~/Documents/Note Templates
 """
 
@@ -15,7 +15,7 @@ from pathlib import Path
 
 from alfred.response import item, output
 
-_ENV_KEY = "NOTE_TEMPLATES_DIR"
+_ENV_KEY = "templates_dir"
 _DEFAULT_DIR = Path.home() / "Documents" / "Note Templates"
 
 
