@@ -15,8 +15,51 @@
 | Target | Alfred 5 Script Filter workflow |
 | Team size | Individual to small team (1–3 people) |
 | Language | English (OSS) |
-| Runtime | Python 3.9+, Alfred 5 |
+| License | MIT |
 | AI tools | Claude Code / GitHub Copilot / Gemini CLI |
+
+Template for building Alfred 5 Script Filter workflows with Python. For individuals and small teams (1–3 people).
+
+## Setup (note.com template paste)
+
+This workflow requires `pyobjc-framework-Cocoa` to write images to the macOS clipboard.
+By default the workflow uses [uv](https://docs.astral.sh/uv/) to install it automatically —
+no global `pip install` needed.
+
+### Option A — uv (default)
+
+1. Install [uv](https://docs.astral.sh/uv/getting-started/installation/):
+   ```bash
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
+2. In Alfred Preferences, open this workflow and click **Configure Workflow**.
+   **Use uv if available** is checked by default — leave it as-is.
+
+### Option B — global pip
+
+1. Install into your system Python:
+   ```bash
+   pip3 install pyobjc-framework-Cocoa
+   ```
+2. In Alfred Preferences, open this workflow, click **Configure Workflow**,
+   and uncheck **Use uv if available**.
+
+### Templates directory
+
+Set **Templates Directory** in **Configure Workflow** to the folder containing your `.md` templates
+(default: `~/Documents/Note Templates`).
+
+Template format — standard markdown image syntax is supported:
+
+```markdown
+# Article Title
+
+Intro text here.
+
+![Image caption](./images/photo.png)
+
+Text after the image.
+```
 
 ## Features
 
@@ -33,46 +76,6 @@
 - Alfred 5 (Powerpack required for Script Filter)
 - Python 3.9+
 - [pre-commit](https://pre-commit.com/) (for security hooks)
-
-## Setup (note.com template paste)
-
-This workflow requires `pyobjc-framework-Cocoa` to write images to the macOS clipboard.
-Choose one of the following installation methods, then configure the workflow variable
-`NOTE_PYTHON_BACKEND` in Alfred's workflow preferences accordingly.
-
-### Option A — uv (recommended, no global install needed)
-
-1. Install [uv](https://docs.astral.sh/uv/getting-started/installation/):
-   ```bash
-   curl -LsSf https://astral.sh/uv/install.sh | sh
-   ```
-2. Set `NOTE_PYTHON_BACKEND` = `uv` (this is the default).
-   uv downloads and caches pyobjc automatically on first run.
-
-### Option B — global pip
-
-1. Install into your system Python:
-   ```bash
-   pip3 install pyobjc-framework-Cocoa
-   ```
-2. Set `NOTE_PYTHON_BACKEND` = `global`.
-
-### Template directory
-
-Set `NOTE_TEMPLATES_DIR` to the folder containing your `.md` templates
-(default: `~/Documents/Note Templates`).
-
-Template format — standard markdown image syntax is supported:
-
-```markdown
-# Article Title
-
-Intro text here.
-
-![Image caption](./images/photo.png)
-
-Text after the image.
-```
 
 ## Quick Start (developers)
 

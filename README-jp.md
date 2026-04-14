@@ -15,39 +15,25 @@
 | 開発対象 | Alfred 5 Script Filter ワークフロー |
 | 開発環境 | 個人〜小規模チーム（1〜3人） |
 | 主言語 | 英語（OSS） |
-| 動作要件 | Python 3.9+, Alfred 5 |
+| ライセンス | MIT |
 | AI ツール | Claude Code / GitHub Copilot / Gemini CLI |
 
-## 特徴
+Python で Alfred 5 Script Filter ワークフローを作るためのテンプレート。個人〜小規模チーム（1〜3人）向け。
 
-- ✅ **レイヤードアーキテクチャ** — Alfred 境界とビジネスロジックを分離
-- ✅ **軽量 Alfred SDK** — レスポンスビルダー、ルーター、キャッシュ、設定、ロガー
-- ✅ **コマンドベース UX** — `wf search`、`wf open`、`wf config`、`wf help`
-- ✅ **フルテストスイート** — pytest で Alfred なしにテスト実行可能
-- ✅ **CI/CD** — GitHub Actions でリント・テスト・ビルド・リリースを自動化
-- ✅ **ベンダーパッケージング** — サードパーティ依存を `vendor/` にバンドル
-- ✅ **AI 対応** — `AI_CONTEXT.md` + `CLAUDE.md` で AI アシスタントのコンテキストを管理
-
-## 動作要件
-
-- Alfred 5（Script Filter には Powerpack が必要）
-- Python 3.9+
-- [pre-commit](https://pre-commit.com/)（セキュリティフック用）
-
-## セットアップ（note.com テンプレート貼り付け）
+## Setup (note.com テンプレート貼り付け)
 
 このワークフローは macOS クリップボードへの画像書き込みに `pyobjc-framework-Cocoa` が必要です。
-以下のどちらかの方法でインストールし、Alfred のワークフロー設定で
-`NOTE_PYTHON_BACKEND` 変数を対応する値に設定してください。
+デフォルトでは [uv](https://docs.astral.sh/uv/) を使って自動インストールするため、
+グローバルな `pip install` は不要です。
 
-### 方法 A — uv（推奨・グローバルインストール不要）
+### 方法 A — uv（デフォルト）
 
 1. [uv](https://docs.astral.sh/uv/getting-started/installation/) をインストール:
    ```bash
    curl -LsSf https://astral.sh/uv/install.sh | sh
    ```
-2. `NOTE_PYTHON_BACKEND` を `uv` に設定（デフォルト値）。
-   初回実行時に uv が pyobjc を自動ダウンロード・キャッシュします。
+2. Alfred Preferences でこのワークフローを開き、**Configure Workflow** をクリック。
+   **Use uv if available** はデフォルトでチェック済み — そのままにしてください。
 
 ### 方法 B — グローバル pip
 
@@ -55,11 +41,12 @@
    ```bash
    pip3 install pyobjc-framework-Cocoa
    ```
-2. `NOTE_PYTHON_BACKEND` を `global` に設定。
+2. Alfred Preferences でこのワークフローを開き、**Configure Workflow** をクリックして
+   **Use uv if available** のチェックを外してください。
 
-### テンプレートディレクトリ
+### Templates Directory（テンプレートディレクトリ）
 
-`NOTE_TEMPLATES_DIR` に `.md` テンプレートを置くフォルダのパスを設定してください
+**Configure Workflow** の **Templates Directory** に `.md` テンプレートを置くフォルダのパスを設定してください
 （デフォルト: `~/Documents/Note Templates`）。
 
 テンプレート形式 — 標準 Markdown の画像記法をそのまま使えます:
@@ -74,7 +61,23 @@
 画像の後のテキスト。
 ```
 
-## クイックスタート（開発者）
+## Features（特徴）
+
+- ✅ **レイヤードアーキテクチャ** — Alfred 境界とビジネスロジックを分離
+- ✅ **軽量 Alfred SDK** — レスポンスビルダー、ルーター、キャッシュ、設定、ロガー
+- ✅ **コマンドベース UX** — `wf search`、`wf open`、`wf config`、`wf help`
+- ✅ **フルテストスイート** — pytest で Alfred なしにテスト実行可能
+- ✅ **CI/CD** — GitHub Actions でリント・テスト・ビルド・リリースを自動化
+- ✅ **ベンダーパッケージング** — サードパーティ依存を `vendor/` にバンドル
+- ✅ **AI 対応** — `AI_CONTEXT.md` + `CLAUDE.md` で AI アシスタントのコンテキストを管理
+
+## Requirements（動作要件）
+
+- Alfred 5（Script Filter には Powerpack が必要）
+- Python 3.9+
+- [pre-commit](https://pre-commit.com/)（セキュリティフック用）
+
+## Quick Start（開発者向けクイックスタート）
 
 ```bash
 git clone https://github.com/yourname/alfred-workflow-template
@@ -97,7 +100,7 @@ make build
 
 `dist/*.alfredworkflow` をダブルクリックして Alfred にインストールします。
 
-## 使い方
+## Usage（使い方）
 
 ```
 wf <query>           検索（デフォルト）
@@ -107,7 +110,7 @@ wf config            設定の確認 / リセット
 wf help              コマンド一覧を表示
 ```
 
-## プロジェクト構造
+## Project Structure（プロジェクト構造）
 
 ```
 alfred-workflow-template/
@@ -120,7 +123,7 @@ alfred-workflow-template/
 └── docs/               # アーキテクチャ・開発・利用ドキュメント
 ```
 
-## ドキュメント
+## Documentation（ドキュメント）
 
 | ドキュメント | 内容 |
 |---|---|
@@ -128,7 +131,7 @@ alfred-workflow-template/
 | [docs/development.md](docs/development.md) | コマンド追加・依存関係管理・リリース手順 |
 | [docs/usage.md](docs/usage.md) | エンドユーザー向け利用ガイド |
 
-## AI 支援開発
+## AI-Assisted Development（AI 支援開発）
 
 このテンプレートは AI 支援開発に対応しています。
 
@@ -140,7 +143,7 @@ alfred-workflow-template/
 
 セッションコンテキスト: [`AI_CONTEXT.md`](AI_CONTEXT.md)、[`CLAUDE.md`](CLAUDE.md)
 
-## このテンプレートのカスタマイズ手順
+## Customizing this template（カスタマイズ手順）
 
 1. `workflow/info.plist` を編集:
    - `bundleid` を自分のバンドル ID に変更（例: `com.yourname.workflowname`）
@@ -151,7 +154,7 @@ alfred-workflow-template/
 4. `src/app/commands/open_cmd.py` のショートカットを更新
 5. `workflow/icon.png` を追加
 
-## リリース手順
+## Release（リリース手順）
 
 ```bash
 # 1. pyproject.toml のバージョンを更新
@@ -161,13 +164,13 @@ git push --tags
 # GitHub Actions が .alfredworkflow をビルドして GitHub Release を作成
 ```
 
-## サポート
+## Support（サポート）
 
 このテンプレートが役に立ったら、サポートしていただけると嬉しいです。
 
 - [Buy Me a Coffee](https://www.buymeacoffee.com/y.marui)
 - [GitHub Sponsors](https://github.com/sponsors/y-marui)
 
-## ライセンス
+## License（ライセンス）
 
 MIT — [LICENSE](LICENSE) を参照
