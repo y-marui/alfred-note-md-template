@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>bundleid</key>
-	<string>com.example.alfred-note-md-template</string>
+	<string>com.github.y-marui.alfred-note-md-template</string>
 	<key>connections</key>
 	<dict>
 		<key>36381EAF-63DA-4000-AED5-AF6DAF671396</key>
@@ -20,10 +20,12 @@
 			</dict>
 		</array>
 	</dict>
+	<key>category</key>
+	<string>Productivity</string>
 	<key>createdby</key>
 	<string>Yukihiro Marui</string>
 	<key>description</key>
-	<string>Paste markdown templates with images into note.com editor</string>
+	<string>Add Markdown style template to note</string>
 	<key>disabled</key>
 	<false/>
 	<key>name</key>
