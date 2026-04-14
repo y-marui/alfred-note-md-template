@@ -58,7 +58,12 @@
 				<key>runningsubtext</key>
 				<string>Loading templates…</string>
 				<key>script</key>
-				<string>python3 scripts/entry.py "note $1"</string>
+				<string>export PATH="$PATH:/usr/local/bin:/opt/homebrew/bin:$HOME/.local/bin:$HOME/.cargo/bin"
+if [ "${use_uv:-1}" = "1" ] &amp;&amp; command -v uv &gt;/dev/null 2&gt;&amp;1; then
+    uv run python scripts/entry.py "note $1"
+else
+    python3 scripts/entry.py "note $1"
+fi</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -88,7 +93,7 @@
 				<integer>0</integer>
 				<key>script</key>
 				<string>export PATH="$PATH:/usr/local/bin:/opt/homebrew/bin:$HOME/.local/bin:$HOME/.cargo/bin"
-if [ "${NOTE_USE_UV:-1}" = "1" ]; then
+if [ "${use_uv:-1}" = "1" ]; then
     uv run --with pyobjc-framework-Cocoa scripts/paste_to_note.py "$1"
 else
     python3 scripts/paste_to_note.py "$1"
@@ -109,11 +114,11 @@ fi</string>
 	<key>readme</key>
 	<string>Paste markdown templates (including images) into note.com editor.
 
-Configuration (Alfred Preferences > Workflows > Configure Workflow):
-- Use uv if available (NOTE_USE_UV): checked by default.
+Configuration (Alfred Preferences &gt; Workflows &gt; Configure Workflow):
+- Use uv if available (use_uv): checked by default.
   Requires uv (https://astral.sh/uv). Uncheck to use system Python instead
   (requires: pip3 install pyobjc-framework-Cocoa).
-- Templates Directory (NOTE_TEMPLATES_DIR): path to your .md templates folder
+- Templates Directory (templates_dir): path to your .md templates folder
   (default: ~/Documents/Note Templates).
 
 Usage:
@@ -121,43 +126,50 @@ Usage:
    ![caption](./images/photo.png)
 2. Open note.com editor in your browser
 3. Trigger Alfred with keyword "note", select a template, press Enter</string>
-	<key>configuration</key>
-	<array>
-		<dict>
-			<key>description</key>
-			<string>When a non-standard Python library is needed, use uv if it is available. Requires uv (https://astral.sh/uv). Uncheck to use system Python (requires: pip3 install pyobjc-framework-Cocoa).</string>
-			<key>required</key>
-			<false/>
-			<key>title</key>
-			<string>Use uv if available</string>
-			<key>type</key>
-			<integer>2</integer>
-			<key>variable</key>
-			<string>NOTE_USE_UV</string>
-		</dict>
-		<dict>
-			<key>description</key>
-			<string>Path to the folder containing your .md template files. Leave empty to use the default: ~/Documents/Note Templates</string>
-			<key>required</key>
-			<false/>
-			<key>title</key>
-			<string>Templates Directory</string>
-			<key>type</key>
-			<integer>0</integer>
-			<key>variable</key>
-			<string>NOTE_TEMPLATES_DIR</string>
-		</dict>
-	</array>
 	<key>variables</key>
-	<dict>
-		<key>NOTE_TEMPLATES_DIR</key>
-		<string></string>
-		<key>NOTE_USE_UV</key>
-		<integer>1</integer>
-	</dict>
+	<dict/>
 	<key>version</key>
 	<string>0.1.0</string>
 	<key>webaddress</key>
 	<string>https://github.com/y-marui/alfred-note-md-template</string>
+	<key>userconfigurationconfig</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>Use uv to run Python scripts when uv is available. Uncheck to use system Python (requires: pip3 install pyobjc-framework-Cocoa).</string>
+			<key>label</key>
+			<string>Use uv (if available)</string>
+			<key>type</key>
+			<string>checkbox</string>
+			<key>variable</key>
+			<string>use_uv</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+				<key>filtermode</key>
+				<integer>1</integer>
+				<key>placeholder</key>
+				<string>~/Documents/Note Templates</string>
+				<key>required</key>
+				<false/>
+			</dict>
+			<key>description</key>
+			<string>Directory containing .md template files. Leave blank to use ~/Documents/Note Templates.</string>
+			<key>label</key>
+			<string>Templates Directory</string>
+			<key>type</key>
+			<string>filepicker</string>
+			<key>variable</key>
+			<string>templates_dir</string>
+		</dict>
+	</array>
 </dict>
 </plist>

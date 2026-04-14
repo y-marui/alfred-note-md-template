@@ -50,6 +50,6 @@ repos:
       - id: mypy
         name: mypy
         language: system
-        entry: python -m mypy src
+        entry: uv run python -m mypy src
         types: [python]
         pass_filenames: false

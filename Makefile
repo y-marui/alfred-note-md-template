@@ -1,18 +1,19 @@
-.PHONY: help install hooks lint format typecheck test test-cov vendor build release run clean update-charter
+.PHONY: help install hooks lint format typecheck test test-cov vendor build deploy release run clean update-charter
 
 # Default target
 help:
 	@echo "Alfred Workflow Template - Development Commands"
 	@echo ""
-	@echo "  make install     Install dev dependencies"
+	@echo "  make install     Install dev dependencies (uv sync + pre-commit)"
 	@echo "  make hooks       Install pre-commit hooks"
 	@echo "  make lint        Run ruff linter"
-	@echo "  make format      Auto-format with black + ruff --fix"
+	@echo "  make format      Auto-format with ruff format + ruff --fix"
 	@echo "  make typecheck   Run mypy type checker"
 	@echo "  make test        Run tests"
 	@echo "  make test-cov    Run tests with coverage report"
 	@echo "  make vendor      Install runtime deps into workflow/vendor/"
 	@echo "  make build       Build .alfredworkflow package"
+	@echo "  make deploy      Build and install into Alfred"
 	@echo "  make release     Create GitHub Release (requires git tag)"
 	@echo "  make run Q=''    Simulate Alfred with query Q"
 	@echo "  make clean       Remove build artifacts"
@@ -23,11 +24,10 @@ help:
 # Setup
 # ---------------------------------------------------------------------------
 install:
-	pip3 install --quiet -e ".[dev]"
-	@command -v pre-commit >/dev/null 2>&1 && $(MAKE) hooks || true
+	uv sync
+	pre-commit install
 
 hooks:
-	pip3 install --quiet pre-commit
 	pre-commit install
 
 # ---------------------------------------------------------------------------
@@ -37,7 +37,7 @@ lint:
 	ruff check src/ tests/
 
 format:
-	black src/ tests/
+	ruff format src/ tests/
 	ruff check --fix src/ tests/
 
 typecheck:
@@ -60,6 +60,9 @@ vendor:
 
 build: vendor
 	./scripts/build.sh
+
+deploy: build
+	@open dist/*.alfredworkflow
 
 release:
 	./scripts/release.sh

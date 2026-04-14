@@ -105,20 +105,20 @@ class TestHelpCommand:
 
 class TestNoteCommand:
     def test_missing_directory_shows_error(self, capsys, monkeypatch):
-        monkeypatch.setenv("NOTE_TEMPLATES_DIR", "/nonexistent/path")
+        monkeypatch.setenv("templates_dir", "/nonexistent/path")
         note_cmd.handle("")
         data = json.loads(capsys.readouterr().out)
         assert "not found" in data["items"][0]["title"].lower()
         assert data["items"][0]["valid"] is False
 
     def test_empty_directory_shows_error(self, capsys, tmp_path: Path, monkeypatch):
-        monkeypatch.setenv("NOTE_TEMPLATES_DIR", str(tmp_path))
+        monkeypatch.setenv("templates_dir", str(tmp_path))
         note_cmd.handle("")
         data = json.loads(capsys.readouterr().out)
         assert "No templates" in data["items"][0]["title"]
 
     def test_lists_md_files(self, capsys, tmp_path: Path, monkeypatch):
-        monkeypatch.setenv("NOTE_TEMPLATES_DIR", str(tmp_path))
+        monkeypatch.setenv("templates_dir", str(tmp_path))
         (tmp_path / "article.md").touch()
         (tmp_path / "review.md").touch()
         (tmp_path / "notes.txt").touch()  # should be ignored
@@ -130,7 +130,7 @@ class TestNoteCommand:
         assert len(titles) == 2
 
     def test_filter_by_query(self, capsys, tmp_path: Path, monkeypatch):
-        monkeypatch.setenv("NOTE_TEMPLATES_DIR", str(tmp_path))
+        monkeypatch.setenv("templates_dir", str(tmp_path))
         (tmp_path / "book-review.md").touch()
         (tmp_path / "travel-log.md").touch()
         note_cmd.handle("book")
@@ -139,14 +139,14 @@ class TestNoteCommand:
         assert data["items"][0]["title"] == "book-review"
 
     def test_no_match_shows_error(self, capsys, tmp_path: Path, monkeypatch):
-        monkeypatch.setenv("NOTE_TEMPLATES_DIR", str(tmp_path))
+        monkeypatch.setenv("templates_dir", str(tmp_path))
         (tmp_path / "article.md").touch()
         note_cmd.handle("xyz")
         data = json.loads(capsys.readouterr().out)
         assert "No templates" in data["items"][0]["title"]
 
     def test_item_arg_is_full_path(self, capsys, tmp_path: Path, monkeypatch):
-        monkeypatch.setenv("NOTE_TEMPLATES_DIR", str(tmp_path))
+        monkeypatch.setenv("templates_dir", str(tmp_path))
         md = tmp_path / "my-template.md"
         md.touch()
         note_cmd.handle("")
