@@ -33,6 +33,13 @@ scripts/        ← build.sh / dev.sh / release.sh / vendor.sh
 
 ---
 
+## ドキュメント同期ルール（Document Sync Rule）
+
+仕様・ルール・構成に変更が生じたとき、変更と同じ作業内で関連ドキュメントを更新する。
+対象は docs/ 内のファイルに限らず、AI_CONTEXT.md・README.md 等のルートファイルも含む。
+
+---
+
 ## 開発原則（PRINCIPLES）
 
 ### 基本哲学
@@ -93,6 +100,11 @@ scripts/        ← build.sh / dev.sh / release.sh / vendor.sh
 ### AI 並用時のルール
 - Claude Code 作業中は Copilot 提案を**参考程度**に（盲目的に受け入れない）
 - Copilot の提案がプロジェクト規約に反する場合は無視し、Claude Code でレビュー後採用
+
+### dev-charter 変更ルール
+- `docs/dev-charter/` 配下のファイルを**直接編集しない**
+- 変更が必要な場合は dev-charter リポジトリ本体に Issue を立て、`git subtree pull` でアップデートを取り込む
+- プロジェクト固有のルールはこの `AI_CONTEXT.md` または専用ファイルに記載する
 
 ---
 
