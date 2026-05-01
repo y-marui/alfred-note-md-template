@@ -9,6 +9,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CI](https://github.com/y-marui/alfred-note-md-template/actions/workflows/ci.yml/badge.svg)](https://github.com/y-marui/alfred-note-md-template/actions/workflows/ci.yml)
 [![Charter Check](https://github.com/y-marui/alfred-note-md-template/actions/workflows/dev-charter-check.yml/badge.svg)](https://github.com/y-marui/alfred-note-md-template/actions/workflows/dev-charter-check.yml)
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/y-marui?style=social)](https://github.com/sponsors/y-marui)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-yellow.svg)](https://www.buymeacoffee.com/y.marui)
 
 | Field | Value |
 |---|---|
@@ -76,6 +78,28 @@ Text after the image.
 - Alfred 5 (Powerpack required for Script Filter)
 - Python 3.9+
 - [pre-commit](https://pre-commit.com/) (for security hooks)
+
+## Quick Start (use this template)
+
+1. Click **Use this template** on GitHub to create your repository.
+2. Clone your new repository:
+   ```bash
+   git clone https://github.com/yourname/your-workflow-name
+   cd your-workflow-name
+   ```
+3. Rename the README template files:
+   ```bash
+   mv README_TEMPLATE.md README.md
+   mv README_TEMPLATE-jp.md README-jp.md
+   ```
+4. Replace placeholders in `README.md` / `README-jp.md`:
+   - `{user}` / `{repo}` / `{workflow}` → your GitHub username, repo name, and CI workflow file name
+   - `[USERNAME]` → your GitHub username
+   - `[BMC_USERNAME]` → your Buy Me a Coffee username
+5. Update `LICENSE` (`[YEAR]`, `[AUTHOR]`).
+6. Edit `workflow/info.plist`:
+   - Replace `bundleid` (`com.yourname.workflowname`)
+   - Replace the trigger keyword (`wf`)
 
 ## Quick Start (developers)
 
@@ -163,13 +187,6 @@ git tag v1.2.3
 git push --tags
 # GitHub Actions builds .alfredworkflow and creates a GitHub Release
 ```
-
-## Support
-
-If this template saves you time, support is appreciated.
-
-- [Buy Me a Coffee](https://www.buymeacoffee.com/y.marui)
-- [GitHub Sponsors](https://github.com/sponsors/y-marui)
 
 ## License
 
