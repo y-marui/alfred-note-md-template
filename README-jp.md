@@ -22,13 +22,13 @@
 
 Python で Alfred 5 Script Filter ワークフローを作るためのテンプレート。個人〜小規模チーム（1〜3人）向け。
 
-## Setup (note.com テンプレート貼り付け)
+## Setup (note.com template paste)
 
 このワークフローは macOS クリップボードへの画像書き込みに `pyobjc-framework-Cocoa` が必要です。
 デフォルトでは [uv](https://docs.astral.sh/uv/) を使って自動インストールするため、
 グローバルな `pip install` は不要です。
 
-### 方法 A — uv（デフォルト）
+### Option A — uv (default)
 
 1. [uv](https://docs.astral.sh/uv/getting-started/installation/) をインストール:
    ```bash
@@ -37,7 +37,7 @@ Python で Alfred 5 Script Filter ワークフローを作るためのテンプ�
 2. Alfred Preferences でこのワークフローを開き、**Configure Workflow** をクリック。
    **Use uv if available** はデフォルトでチェック済み — そのままにしてください。
 
-### 方法 B — グローバル pip
+### Option B — global pip
 
 1. システムの Python にインストール:
    ```bash
@@ -46,7 +46,7 @@ Python で Alfred 5 Script Filter ワークフローを作るためのテンプ�
 2. Alfred Preferences でこのワークフローを開き、**Configure Workflow** をクリックして
    **Use uv if available** のチェックを外してください。
 
-### Templates Directory（テンプレートディレクトリ）
+### Templates directory
 
 **Configure Workflow** の **Templates Directory** に `.md` テンプレートを置くフォルダのパスを設定してください
 （デフォルト: `~/Documents/Note Templates`）。
@@ -63,7 +63,7 @@ Python で Alfred 5 Script Filter ワークフローを作るためのテンプ�
 画像の後のテキスト。
 ```
 
-## Features（特徴）
+## Features
 
 - ✅ **レイヤードアーキテクチャ** — Alfred 境界とビジネスロジックを分離
 - ✅ **軽量 Alfred SDK** — レスポンスビルダー、ルーター、キャッシュ、設定、ロガー
@@ -73,13 +73,13 @@ Python で Alfred 5 Script Filter ワークフローを作るためのテンプ�
 - ✅ **ベンダーパッケージング** — サードパーティ依存を `vendor/` にバンドル
 - ✅ **AI 対応** — `AI_CONTEXT.md` + `CLAUDE.md` で AI アシスタントのコンテキストを管理
 
-## Requirements（動作要件）
+## Requirements
 
 - Alfred 5（Script Filter には Powerpack が必要）
 - Python 3.9+
 - [pre-commit](https://pre-commit.com/)（セキュリティフック用）
 
-## Quick Start（テンプレートを使う）
+## Quick Start (use this template)
 
 1. GitHub の **Use this template** ボタンをクリックしてリポジトリを作成します。
 2. 作成したリポジトリをクローン:
@@ -101,7 +101,7 @@ Python で Alfred 5 Script Filter ワークフローを作るためのテンプ�
    - `bundleid` を自分のバンドル ID に変更（例: `com.yourname.workflowname`）
    - キーワード（`wf`）を自分のトリガーキーワードに変更
 
-## Quick Start（開発者向けクイックスタート）
+## Quick Start (developers)
 
 ```bash
 git clone https://github.com/yourname/alfred-workflow-template
@@ -124,7 +124,7 @@ make build
 
 `dist/*.alfredworkflow` をダブルクリックして Alfred にインストールします。
 
-## Usage（使い方）
+## Usage
 
 ```
 wf <query>           検索（デフォルト）
@@ -134,7 +134,7 @@ wf config            設定の確認 / リセット
 wf help              コマンド一覧を表示
 ```
 
-## Project Structure（プロジェクト構造）
+## Project Structure
 
 ```
 alfred-workflow-template/
@@ -147,7 +147,7 @@ alfred-workflow-template/
 └── docs/               # アーキテクチャ・開発・利用ドキュメント
 ```
 
-## Documentation（ドキュメント）
+## Documentation
 
 | ドキュメント | 内容 |
 |---|---|
@@ -155,7 +155,7 @@ alfred-workflow-template/
 | [docs/development.md](docs/development.md) | コマンド追加・依存関係管理・リリース手順 |
 | [docs/usage.md](docs/usage.md) | エンドユーザー向け利用ガイド |
 
-## AI-Assisted Development（AI 支援開発）
+## AI-Assisted Development
 
 このテンプレートは AI 支援開発に対応しています。
 
@@ -167,7 +167,7 @@ alfred-workflow-template/
 
 セッションコンテキスト: [`AI_CONTEXT.md`](AI_CONTEXT.md)、[`CLAUDE.md`](CLAUDE.md)
 
-## Customizing this template（カスタマイズ手順）
+## Customizing this template
 
 1. `workflow/info.plist` を編集:
    - `bundleid` を自分のバンドル ID に変更（例: `com.yourname.workflowname`）
@@ -178,7 +178,7 @@ alfred-workflow-template/
 4. `src/app/commands/open_cmd.py` のショートカットを更新
 5. `workflow/icon.png` を追加
 
-## Release（リリース手順）
+## Release
 
 ```bash
 # 1. pyproject.toml のバージョンを更新
@@ -188,6 +188,6 @@ git push --tags
 # GitHub Actions が .alfredworkflow をビルドして GitHub Release を作成
 ```
 
-## License（ライセンス）
+## License
 
 MIT — [LICENSE](LICENSE) を参照
