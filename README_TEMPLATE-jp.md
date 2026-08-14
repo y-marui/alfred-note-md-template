@@ -11,13 +11,13 @@
 
 このワークフローが何を・誰のために・どう解決するかを1文で説明する。
 
-## Setup（セットアップ）
+## Setup
 
 1. [Releases](https://github.com/{user}/{repo}/releases) から `.alfredworkflow` ファイルをダブルクリックしてインストール。
 2. Alfred Preferences でこのワークフローを開き、**Configure Workflow** をクリック。
 3. 必要な設定を入力する。
 
-## Usage（使い方）
+## Usage
 
 | トリガー | 説明 |
 |---|---|
@@ -26,7 +26,7 @@
 | `wf config` | 設定の確認 / リセット |
 | `wf help` | コマンド一覧を表示 |
 
-## License（ライセンス）
+## License
 
 MIT — [LICENSE](LICENSE) を参照
 

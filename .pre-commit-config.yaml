@@ -44,6 +44,17 @@ repos:
         entry: ".env files must not be committed"
         files: '^\.env(\..+)?$'
 
+  # Markdown section headings must be in English (dev-charter LANGUAGE_POLICY)
+  # Excludes templates/: note.com article content, not project documentation.
+  - repo: local
+    hooks:
+      - id: check-markdown-heading-language
+        name: Check Markdown section heading language
+        language: script
+        entry: scripts/check-markdown-heading-language.sh
+        files: '\.md$'
+        exclude: '^templates/'
+
   # Type checking (runs mypy against src/)
   - repo: local
     hooks:
