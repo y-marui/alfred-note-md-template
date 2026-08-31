@@ -47,7 +47,7 @@ jobs:
 
       - uses: actions/setup-python@v7
         with:
-          python-version: "3.11"
+          python-version-file: ".python-version"
 
       - uses: astral-sh/setup-uv@v7
 
@@ -71,7 +71,7 @@ jobs:
 
       - uses: actions/setup-python@v7
         with:
-          python-version: "3.11"
+          python-version-file: ".python-version"
 
       - uses: astral-sh/setup-uv@v7
 
@@ -91,7 +91,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        python-version: ["3.11", "3.12", "3.13", "3.14"]
+        python-version: ["3.11", "3.12", "3.13", "3.14"]  # EOLまで6ヶ月以上あるバージョン
 
     steps:
       - uses: actions/checkout@v7
@@ -126,7 +126,7 @@ jobs:
 
       - uses: actions/setup-python@v7
         with:
-          python-version: "3.11"
+          python-version-file: ".python-version"
 
       - uses: astral-sh/setup-uv@v7
 
