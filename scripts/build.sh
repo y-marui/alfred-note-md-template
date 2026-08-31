@@ -59,20 +59,20 @@ cp -r "$SRC_DIR/" "$BUILD_DIR/src/"
 echo "→ Installing vendor dependencies"
 mkdir -p "$BUILD_DIR/vendor"
 
-if [[ ! -f "$REPO_ROOT/requirements.txt" ]]; then
-  echo "  No requirements.txt - skipping"
-elif ! grep -qE '^[^#[:space:]]' "$REPO_ROOT/requirements.txt"; then
-  echo "  requirements.txt has no packages - skipping"
+if [[ ! -f "$REPO_ROOT/vendor-requirements.txt" ]]; then
+  echo "  No vendor-requirements.txt - skipping"
+elif ! grep -qE '^[^#[:space:]]' "$REPO_ROOT/vendor-requirements.txt"; then
+  echo "  vendor-requirements.txt has no packages - skipping"
 elif command -v uv >/dev/null 2>&1; then
   uv pip install \
     --quiet \
-    --requirement "$REPO_ROOT/requirements.txt" \
+    --requirement "$REPO_ROOT/vendor-requirements.txt" \
     --target "$BUILD_DIR/vendor" \
     --upgrade
 else
   pip3 install \
     --quiet \
-    --requirement "$REPO_ROOT/requirements.txt" \
+    --requirement "$REPO_ROOT/vendor-requirements.txt" \
     --target "$BUILD_DIR/vendor" \
     --upgrade
 fi

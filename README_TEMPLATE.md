@@ -29,3 +29,7 @@ One-sentence description: what this workflow does, for whom, and what problem it
 ## License
 
 MIT — see [LICENSE](LICENSE)
+
+---
+
+*This document has a Japanese canonical version [README_TEMPLATE-jp.md](README_TEMPLATE-jp.md). Update both in the same commit when editing.*

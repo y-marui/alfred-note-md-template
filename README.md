@@ -191,3 +191,7 @@ git push --tags
 ## License
 
 MIT — see [LICENSE](LICENSE)
+
+---
+
+*This document has a Japanese canonical version [README-jp.md](README-jp.md). Update both in the same commit when editing.*

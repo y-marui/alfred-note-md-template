@@ -32,4 +32,4 @@ MIT — [LICENSE](LICENSE) を参照
 
 ---
 
-*This document has a Japanese version above. Update both in the same commit when editing.*
+*この文書には英語版 [README_TEMPLATE.md](README_TEMPLATE.md) があります。編集時は同一コミットで更新してください。*

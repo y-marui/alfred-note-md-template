@@ -29,7 +29,7 @@ Cache TTL default: 300s (5 min).
 
 ## Dependency management
 
-Runtime dependencies → `requirements.txt` → vendored into `workflow/vendor/`
+Runtime dependencies → `vendor-requirements.txt` → vendored into `workflow/vendor/`
 Dev dependencies → `pyproject.toml [project.optional-dependencies.dev]`
 
 Keep runtime deps minimal. Every package adds to workflow size.
