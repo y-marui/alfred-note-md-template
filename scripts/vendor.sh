@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Install runtime dependencies into workflow/vendor/
-# Run this after adding packages to requirements.txt.
+# Run this after adding packages to vendor-requirements.txt.
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -12,14 +12,14 @@ mkdir -p "$VENDOR_DIR"
 # Clear existing vendor dir to avoid stale packages
 rm -rf "${VENDOR_DIR:?}"/*
 
-if [[ ! -f "$REPO_ROOT/requirements.txt" ]]; then
-  echo "  No requirements.txt found - skipping vendor install"
+if [[ ! -f "$REPO_ROOT/vendor-requirements.txt" ]]; then
+  echo "  No vendor-requirements.txt found - skipping vendor install"
   exit 0
 fi
 
-# Skip if requirements.txt contains no installable lines (only comments/blanks)
-if ! grep -qE '^[^#[:space:]]' "$REPO_ROOT/requirements.txt"; then
-  echo "  requirements.txt has no packages - skipping vendor install"
+# Skip if vendor-requirements.txt contains no installable lines (only comments/blanks)
+if ! grep -qE '^[^#[:space:]]' "$REPO_ROOT/vendor-requirements.txt"; then
+  echo "  vendor-requirements.txt has no packages - skipping vendor install"
   exit 0
 fi
 
@@ -27,13 +27,13 @@ fi
 if command -v uv >/dev/null 2>&1; then
   uv pip install \
     --quiet \
-    --requirement "$REPO_ROOT/requirements.txt" \
+    --requirement "$REPO_ROOT/vendor-requirements.txt" \
     --target "$VENDOR_DIR" \
     --upgrade
 else
   pip3 install \
     --quiet \
-    --requirement "$REPO_ROOT/requirements.txt" \
+    --requirement "$REPO_ROOT/vendor-requirements.txt" \
     --target "$VENDOR_DIR" \
     --upgrade
 fi

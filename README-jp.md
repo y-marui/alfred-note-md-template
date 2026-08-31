@@ -191,3 +191,7 @@ git push --tags
 ## License
 
 MIT — [LICENSE](LICENSE) を参照
+
+---
+
+*この文書には英語版 [README.md](README.md) があります。編集時は同一コミットで更新してください。*
