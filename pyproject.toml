@@ -38,6 +38,10 @@ where = ["src"]
 src = ["src"]
 target-version = "py311"
 line-length = 100
+# docs/dev-charter/ is a git subtree we cannot edit directly (see
+# AI_CONTEXT.md); recent ruff formats fenced Python blocks in Markdown
+# by default, which would otherwise flag it.
+extend-exclude = ["docs/dev-charter"]
 
 [tool.ruff.lint]
 select = [
