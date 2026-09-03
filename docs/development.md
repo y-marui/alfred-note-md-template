@@ -54,6 +54,7 @@ make typecheck     # mypy
 ```python
 from alfred.response import item, output
 
+
 def handle(args: str) -> None:
     output([item("My command", f"Args: {args}", arg=args)])
 ```
@@ -62,6 +63,7 @@ def handle(args: str) -> None:
 
 ```python
 from app.commands import my_cmd
+
 router.register("my")(my_cmd.handle)
 ```
 

@@ -7,6 +7,10 @@ on:
     types: [opened, synchronize, reopened, ready_for_review]
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   changes:
     name: Detect changes
@@ -52,7 +56,7 @@ jobs:
         with:
           python-version-file: ".python-version"
 
-      - uses: astral-sh/setup-uv@v7
+      - uses: astral-sh/setup-uv@v10.0.1
 
       - name: Install dev dependencies
         run: uv sync
@@ -76,7 +80,7 @@ jobs:
         with:
           python-version-file: ".python-version"
 
-      - uses: astral-sh/setup-uv@v7
+      - uses: astral-sh/setup-uv@v10.0.1
 
       - name: Install dev dependencies
         run: uv sync
@@ -103,7 +107,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - uses: astral-sh/setup-uv@v7
+      - uses: astral-sh/setup-uv@v10.0.1
 
       - name: Install dev dependencies
         run: uv sync
@@ -131,7 +135,7 @@ jobs:
         with:
           python-version-file: ".python-version"
 
-      - uses: astral-sh/setup-uv@v7
+      - uses: astral-sh/setup-uv@v10.0.1
 
       - name: Build .alfredworkflow
         run: ./scripts/build.sh
