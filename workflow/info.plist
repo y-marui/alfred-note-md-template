@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>bundleid</key>
-	<string>com.github.y-marui.alfred-note-md-template</string>
+	<string>com.y-marui.alfred-note-md-template</string>
 	<key>connections</key>
 	<dict>
 		<key>36381EAF-63DA-4000-AED5-AF6DAF671396</key>
