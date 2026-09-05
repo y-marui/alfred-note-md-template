@@ -117,6 +117,9 @@ alfred-note-md-template/
 |---|---|
 | [DEVELOPING.md](DEVELOPING.md) | Development workflow, naming conventions, code review |
 | [docs/architecture.md](docs/architecture.md) | Full architecture and package design |
+| [docs/file-map.md](docs/file-map.md) | File-level dependency map |
+| [docs/specification.md](docs/specification.md) | Functional specification and data flow |
+| [docs/ui-design.md](docs/ui-design.md) | Alfred result item UI conventions |
 | [docs/usage.md](docs/usage.md) | End-user usage guide |
 | [docs/decisions/](docs/decisions/) | Architecture decision records |
 

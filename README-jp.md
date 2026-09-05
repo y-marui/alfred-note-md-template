@@ -117,6 +117,9 @@ alfred-note-md-template/
 |---|---|
 | [DEVELOPING.md](DEVELOPING.md) | 開発フロー・命名規則・コードレビュー |
 | [docs/architecture.md](docs/architecture.md) | アーキテクチャ全体設計 |
+| [docs/file-map.md](docs/file-map.md) | ファイルレベルの依存関係マップ |
+| [docs/specification.md](docs/specification.md) | 機能仕様・データフロー |
+| [docs/ui-design.md](docs/ui-design.md) | Alfred結果アイテムのUI設計指針 |
 | [docs/usage.md](docs/usage.md) | エンドユーザー向け利用ガイド |
 | [docs/decisions/](docs/decisions/) | アーキテクチャ決定記録 (ADR) |
 
