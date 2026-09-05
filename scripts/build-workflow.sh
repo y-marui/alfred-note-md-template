@@ -6,8 +6,12 @@
 #      (cmd/note-md-template-alfred, cmd/note-md-template-paste-alfred) as
 #      universal (amd64+arm64) binaries via lipo, so the bundle runs
 #      natively on both Intel and Apple Silicon.
-#   2. Copy workflow/ (info.plist, icon.png) into the build dir.
-#   3. Zip into dist/<name>-<version>.alfredworkflow.
+#   2. If CODESIGN_IDENTITY is set, codesign each binary (and notarize it if
+#      NOTARY_KEY_ID is also set). Unset by default, so an ordinary local
+#      `make build-workflow` stays unsigned; .github/workflows/release.yml
+#      sets these for tagged releases.
+#   3. Copy workflow/ (info.plist, icon.png) into the build dir.
+#   4. Zip into dist/<name>-<version>.alfredworkflow.
 set -euo pipefail
 
 REPO_ROOT=$(git rev-parse --show-toplevel)
@@ -29,6 +33,19 @@ for bin in "${BINARIES[@]}"; do
   rm "${BUILD_DIR}/${bin}-amd64" "${BUILD_DIR}/${bin}-arm64"
   chmod +x "${BUILD_DIR}/${bin}"
   lipo -info "${BUILD_DIR}/${bin}"
+
+  if [ -n "${CODESIGN_IDENTITY:-}" ]; then
+    echo "→ Signing ${bin} (${CODESIGN_IDENTITY})"
+    codesign --force --options runtime --timestamp --sign "$CODESIGN_IDENTITY" \
+      "${BUILD_DIR}/${bin}"
+    codesign --verify --strict --verbose=2 "${BUILD_DIR}/${bin}"
+
+    if [ -n "${NOTARY_KEY_ID:-}" ]; then
+      "${REPO_ROOT}/scripts/notarize-binary.sh" "${BUILD_DIR}/${bin}"
+    fi
+  else
+    echo "→ Skipping signing of ${bin} (CODESIGN_IDENTITY not set) — unsigned local/dev build"
+  fi
 done
 
 VERSION=$(/usr/libexec/PlistBuddy -c "Print :version" "${BUILD_DIR}/info.plist")
