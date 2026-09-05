@@ -9,7 +9,7 @@ Only the latest release is supported with security fixes.
 Please **do not** open a public GitHub issue for security vulnerabilities.
 
 Instead, report them privately via
-[GitHub Security Advisories](https://github.com/yourname/alfred-workflow-template/security/advisories/new)
+[GitHub Security Advisories](https://github.com/y-marui/alfred-note-md-template/security/advisories/new)
 or email the maintainer directly.
 
 We aim to acknowledge reports within 48 hours and provide a fix within 7 days
@@ -17,14 +17,20 @@ for confirmed vulnerabilities.
 
 ## Scope
 
-This is a workflow template. Common areas of concern:
+This workflow reads local Markdown template files and writes them to the
+macOS clipboard. Common areas of concern:
 
 - **Credential handling** — never store secrets in `workflow/info.plist` or
   committed files; use Alfred's built-in encrypted keychain instead.
-- **Input sanitization** — Alfred query strings are passed to `entry.py`; they
-  must not be interpolated into shell commands or SQL without sanitization.
-- **Dependency security** — vendored packages in `workflow/vendor/` should be
-  kept up-to-date; dependabot monitors `.github/workflows/` automatically.
+- **Input handling** — the Alfred query and the selected template path are
+  passed to `cmd/note-md-template-alfred` and `cmd/note-md-template-paste-alfred`
+  as plain arguments; they must not be interpolated into shell commands or
+  AppleScript without proper quoting (see `internal/clipboard`'s AppleScript
+  string escaping).
+- **Clipboard/keystroke automation** — `internal/keystroke` simulates Cmd+V
+  and Return via `osascript`/System Events; this requires the user to grant
+  Accessibility permission to Alfred, and only ever acts on content the user
+  selected.
 
 ## Automated security checks
 

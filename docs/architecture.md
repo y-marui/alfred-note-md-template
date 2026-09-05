@@ -2,109 +2,71 @@
 
 ## Overview
 
-This workflow uses a layered architecture to keep Alfred-specific code isolated
-from business logic, making it easy to test and extend.
+This workflow is split into two independent binaries — one per Alfred node
+— backed by shared, Alfred-independent internal packages.
 
 ```
 Alfred
-  │  keyword + query
+  │  keyword "note" + query
   ▼
-workflow/scripts/entry.py       ← Alfred boundary (UI layer)
+cmd/note-md-template-alfred/main.go     ← Script Filter binary
   │
   ▼
-src/alfred/safe_run.py          ← Exception safety wrapper
+internal/templatelist                   ← list + filter .md templates
   │
   ▼
-src/app/core.py                 ← Application orchestrator
+internal/scriptfilter                   ← Script Filter JSON response
+
+Alfred (user selects a result)
+  │  selected template's absolute path
+  ▼
+cmd/note-md-template-paste-alfred/main.go  ← Run Script action binary
   │
   ▼
-src/alfred/router.py            ← Command dispatcher
+internal/mdtemplate                     ← parse template into blocks
   │
-  ├─ search  → src/app/commands/search.py
-  ├─ open    → src/app/commands/open_cmd.py
-  ├─ config  → src/app/commands/config_cmd.py
-  └─ help    → src/app/commands/help_cmd.py
-                │
-                ▼
-            src/app/services/   ← Business logic + caching
-                │
-                ▼
-            src/app/clients/    ← External API / IO
+  ▼
+internal/paste                          ← sequence clipboard + keystrokes
+  │                                        per block
+  ├─ internal/clipboard                 ← write text/image to pasteboard
+  └─ internal/keystroke                 ← simulate Cmd+V / Return
 ```
 
-## Layers
+## Packages
 
-### UI Layer (`workflow/`)
-
-- `scripts/entry.py`: The only file Alfred executes directly.
-  - Sets up `sys.path` (vendor + src)
-  - Calls `safe_run(main)`
-  - No business logic here
-
-### Alfred SDK (`src/alfred/`)
-
-Thin helpers that abstract Alfred-specific behavior.
-These are **not** application logic — they wrap Alfred's environment.
-
-| Module | Purpose |
+| Package | Purpose |
 |---|---|
-| `response.py` | Build and emit Script Filter JSON |
-| `router.py` | Parse query → dispatch to command |
-| `safe_run.py` | Catch exceptions → show error item |
-| `cache.py` | TTL disk cache via `alfred_workflow_cache` |
-| `config.py` | Persistent config via `alfred_workflow_data` |
-| `logger.py` | File logger to `~/Library/Logs/Alfred/Workflow/` |
+| `internal/mdtemplate` | Parses a `.md` template file into an ordered list of `TextBlock`/`ImageBlock`/`CaptionBlock` values. Pure logic, no I/O beyond reading the file. |
+| `internal/templatelist` | Lists `.md` files under the `templates_dir` Config Builder variable (default `~/Documents/Note Templates`), filtered by the Alfred query. |
+| `internal/paste` | Given parsed blocks, sequences calls to a `Clipboard` and `Keyboard` interface — text is pasted as-is, images are pasted then given extra time to render, captions are pasted and confirmed with two Returns. Tested with fakes; never shells out itself. |
+| `internal/clipboard` | Writes plain text (`pbcopy`) or an image file (`osascript` coercing to `TIFF picture`) to the general pasteboard. |
+| `internal/keystroke` | Simulates Cmd+V and Return via `osascript`/System Events, with the settle delays note.com's editor needs between actions. |
+| `internal/scriptfilter` | Alfred Script Filter JSON types (`Item`, `Response`) and the writer that encodes them to stdout. |
 
-### Application Layer (`src/app/`)
+## Binaries
 
-Pure Python business logic — no Alfred dependency.
-This layer can be tested without Alfred and run from the CLI.
+| Binary | Alfred node | Role |
+|---|---|---|
+| `cmd/note-md-template-alfred` | Script Filter (keyword `note`) | Lists/filters templates, writes a Script Filter response. Wraps `internal/templatelist.List` in a `recover()` so an unhandled panic still shows a visible error item instead of blank output. |
+| `cmd/note-md-template-paste-alfred` | Run Script action | Parses the selected template and plays it into the frontmost app via `internal/paste`, using the real `internal/clipboard` and `internal/keystroke` implementations. |
 
-| Directory | Purpose |
-|---|---|
-| `commands/` | One module per Alfred command. Each has `handle(args: str) -> None` |
-| `services/` | Business logic coordinating between commands and clients |
-| `clients/` | Thin HTTP/IO wrappers for external APIs |
-| `core.py` | Wires router to commands — the dependency injection point |
-
-## Query Parsing
-
-Alfred sends the full query string to the script.
-The router splits it into `<command> <args>`:
-
-```
-"search foo bar"  →  command="search",  args="foo bar"
-"open repo"       →  command="open",    args="repo"
-"config"          →  command="config",  args=""
-"foo bar"         →  command="search",  args="foo bar" (default fallback)
-```
-
-## Dependency Flow
-
-```
-commands → services → clients → external APIs
-         ↘
-           alfred SDK (response, cache, config, logger)
-```
-
-Commands depend on services, not clients directly.
-Services own caching logic.
-Clients are stateless HTTP wrappers.
+Neither binary contains business logic beyond argument handling and wiring
+— see `CLAUDE.md`'s Architecture rules.
 
 ## Packaging
 
-At build time (`make build`):
+At build time (`make build-workflow` / `scripts/build-workflow.sh`):
 
 ```
-.build/               ← temporary build directory
-├── info.plist        ← version synced from pyproject.toml
+.build/                                   ← temporary build directory
+├── info.plist                            ← copied from workflow/
 ├── icon.png
-├── scripts/
-│   └── entry.py
-├── src/              ← copied from repo src/
-│   ├── alfred/
-│   └── app/
-└── vendor/           ← pip install -r vendor-requirements.txt -t vendor/
+├── note-md-template-alfred               ← universal (amd64+arm64) binary
+└── note-md-template-paste-alfred         ← universal (amd64+arm64) binary
 ```
 
-The entire `.build/` directory is zipped to `dist/<name>-<version>.alfredworkflow`.
+Both binaries are built for `darwin/amd64` and `darwin/arm64` and merged
+into a single universal binary with `lipo`, so the packaged workflow runs
+natively on both Intel and Apple Silicon Macs without needing a runtime
+interpreter or vendored dependencies. The entire `.build/` directory is
+zipped to `dist/<name>-<version>.alfredworkflow`.

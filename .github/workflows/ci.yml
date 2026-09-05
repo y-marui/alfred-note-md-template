@@ -52,14 +52,9 @@ jobs:
         with:
           fetch-depth: 0  # gitleaks needs full history
 
-      - uses: actions/setup-python@v7
+      - uses: actions/setup-go@v7
         with:
-          python-version-file: ".python-version"
-
-      - uses: astral-sh/setup-uv@v10.0.1
-
-      - name: Install dev dependencies
-        run: uv sync
+          go-version-file: go.mod
 
       - name: Run pre-commit (all hooks including gitleaks)
         uses: pre-commit/action@v3.0.1
@@ -72,55 +67,39 @@ jobs:
     name: Lint
     needs: changes
     if: needs.changes.outputs.code == 'true'
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v7
+      - uses: actions/setup-go@v7
         with:
-          python-version-file: ".python-version"
+          go-version-file: go.mod
 
-      - uses: astral-sh/setup-uv@v10.0.1
+      - name: gofmt
+        run: |
+          out=$(gofmt -l .)
+          if [ -n "$out" ]; then
+            echo "gofmt needs to be run on:"
+            echo "$out"
+            exit 1
+          fi
 
-      - name: Install dev dependencies
-        run: uv sync
-
-      - name: Ruff lint
-        run: uv run ruff check src/ tests/
-
-      - name: Mypy type check
-        run: uv run mypy src/
+      - run: go vet ./...
 
   test:
-    name: Test (Python ${{ matrix.python-version }})
+    name: Test
     needs: changes
     if: needs.changes.outputs.code == 'true'
     runs-on: macos-latest
-    strategy:
-      matrix:
-        python-version: ["3.11", "3.12", "3.13", "3.14"]  # EOLまで6ヶ月以上あるバージョン
-
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v7
+      - uses: actions/setup-go@v7
         with:
-          python-version: ${{ matrix.python-version }}
-
-      - uses: astral-sh/setup-uv@v10.0.1
-
-      - name: Install dev dependencies
-        run: uv sync
+          go-version-file: go.mod
 
       - name: Run tests
-        run: uv run pytest --tb=short
-
-      - name: Upload coverage (Python 3.11 only)
-        if: matrix.python-version == '3.11'
-        uses: actions/upload-artifact@v7
-        with:
-          name: coverage-report
-          path: htmlcov/
+        run: go test ./...
 
   build:
     name: Build
@@ -131,14 +110,12 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v7
+      - uses: actions/setup-go@v7
         with:
-          python-version-file: ".python-version"
-
-      - uses: astral-sh/setup-uv@v10.0.1
+          go-version-file: go.mod
 
       - name: Build .alfredworkflow
-        run: ./scripts/build.sh
+        run: make build-workflow
 
       - name: Upload artifact
         uses: actions/upload-artifact@v7

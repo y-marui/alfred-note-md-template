@@ -10,10 +10,13 @@ Thank you for contributing!
 ## Development setup
 
 ```bash
-git clone https://github.com/yourname/alfred-workflow-template
-cd alfred-workflow-template
-make install
+git clone https://github.com/y-marui/alfred-note-md-template
+cd alfred-note-md-template
+go build ./...
 ```
+
+See [DEVELOPING.md](DEVELOPING.md) for the full development workflow, naming
+conventions, and code review guidelines.
 
 ## Making changes
 
@@ -23,19 +26,17 @@ make install
 
 ```bash
 make lint
-make typecheck
 make test
 make build
 ```
 
-4. Test in Alfred: `make build` → double-click the `.alfredworkflow`
+4. Test in Alfred: `make build-workflow` → double-click the `.alfredworkflow`
 5. Open a PR using the template
 
 ## Code style
 
-- ruff + black enforced by CI
-- Type hints required on all public functions
-- Keep runtime dependencies minimal (they're vendored)
+- `gofmt` + `go vet` enforced by CI
+- Keep `go.mod` dependency-free unless clearly justified
 
 ## Commit guidelines
 
@@ -49,9 +50,9 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 ```
 feat: add clipboard copy action
 fix: cache miss on special characters in query
-chore: update ruff to 0.5.0
+chore: update Go toolchain to 1.28
 docs: add examples to usage.md
-refactor: simplify router dispatch logic
+refactor: simplify paste sequencing logic
 ```
 
 ## Pull Request checklist

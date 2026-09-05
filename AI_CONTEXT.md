@@ -1,4 +1,4 @@
-# AI_CONTEXT.md — alfred-workflow-template
+# AI_CONTEXT.md — alfred-note-md-template
 
 > このファイルは開発憲章（`docs/dev-charter/`）をこのプロジェクト向けにまとめたものです。
 > AIツールはセッション開始時にこのファイルを読むことで、憲章全体を参照しなくても
@@ -8,16 +8,22 @@
 
 ## Project Overview
 
-Alfred 5 Script Filter ワークフロー用の OSS テンプレート。
-Python 3.9+、レイヤードアーキテクチャ、CI/CD 完備。
+note.com のエディタへ Markdown テンプレート（画像・キャプション込み）を貼り付ける
+Alfred 5 Script Filter ワークフロー。
+Go（サードパーティ依存なし）、`cmd/`+`internal/` レイアウト、CI/CD 完備。
 対象: 個人〜3人規模の開発チーム。
 
 ```
-src/alfred/     ← Alfred SDK（response / router / cache / config / logger / safe_run）
-src/app/        ← アプリケーション層（commands / services / clients）
-workflow/       ← Alfred パッケージ（info.plist / scripts/entry.py / vendor/）
-tests/          ← pytest テストスイート
-scripts/        ← build.sh / dev.sh / release.sh / vendor.sh
+cmd/note-md-template-alfred/       ← Script Filter バイナリ（テンプレート一覧・絞り込み）
+cmd/note-md-template-paste-alfred/ ← Run Script アクションバイナリ（選択したテンプレートを貼り付け）
+internal/mdtemplate/               ← Markdown テンプレートのブロック分解（コア、stdlib のみ）
+internal/templatelist/             ← テンプレートディレクトリの一覧・絞り込み
+internal/paste/                    ← ブロックごとのクリップボード書き込み・キー操作の順序制御
+internal/clipboard/                ← クリップボードへのテキスト・画像書き込み（pbcopy / osascript）
+internal/keystroke/                ← ペースト・改行キー操作（osascript 経由の System Events）
+internal/scriptfilter/             ← Alfred Script Filter JSON 型
+workflow/                          ← Alfred パッケージ（info.plist / icon.png）
+scripts/                           ← build-workflow.sh / extract-changelog.sh
 ```
 
 詳細アーキテクチャ: `docs/architecture.md`
@@ -60,9 +66,8 @@ scripts/        ← build.sh / dev.sh / release.sh / vendor.sh
 ## Code Style (CODE_STYLE)
 
 - コメントは **「なぜそうするか」のみ** 書く。コードから自明な処理には書かない
-- ruff + black、行長 100
-- すべての public 関数に型ヒント必須
-- 各モジュール先頭に `from __future__ import annotations`
+- `gofmt` + `go vet`。CI で強制する
+- すべての exported 関数・型に doc コメントを検討する（自明でないもののみ）
 
 ---
 
@@ -188,21 +193,23 @@ README.md の末尾に Buy Me a Coffee バッジを掲載する。
 ## Development Commands
 
 ```bash
-make install          # dev 依存関係をインストール
-make run Q="search foo"  # Alfred をローカルでシミュレート
-make test             # テスト実行
-make lint             # ruff + black チェック
-make typecheck        # mypy
-make build            # dist/*.alfredworkflow を生成
-make vendor           # workflow/vendor/ を更新
+go run ./cmd/note-md-template-alfred "query"   # Alfred をローカルでシミュレート
+make test             # go test ./...
+make lint             # gofmt -l + go vet
+make fmt              # gofmt -w（自動整形）
+make build            # go build ./...
+make build-workflow   # dist/*.alfredworkflow を生成
 ```
 
 ## Release Steps
 
 ```bash
-# pyproject.toml のバージョンを更新
+# workflow/info.plist の version を更新
+# CHANGELOG.md に [Unreleased] からエントリを移動
+git add workflow/info.plist CHANGELOG.md
+git commit -m "chore: release v1.2.3"
 git tag v1.2.3
-git push --tags
+git push origin main --tags
 # GitHub Actions が .alfredworkflow を生成して GitHub Release を作成
 ```
 
