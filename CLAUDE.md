@@ -1,38 +1,32 @@
 @AI_CONTEXT.md
 
-## Adding a new command
+## Adding a new internal package
 
-1. Create `src/app/commands/my_cmd.py` with `handle(args: str) -> None`
-2. Register in `src/app/core.py`: `router.register("my")(my_cmd.handle)`
-3. Add tests in `tests/test_commands.py`
+1. Add pure logic (no Alfred/OS dependency) under `internal/<name>/`, tested with `go test`.
+2. If it needs to build a Script Filter response, depend on `internal/scriptfilter`.
+3. Wire it up from `cmd/note-md-template-alfred/main.go` or `cmd/note-md-template-paste-alfred/main.go` — those files hold no business logic themselves.
 
 ## Architecture rules
 
-- `workflow/scripts/entry.py` is the **only** file Alfred executes. No business logic here.
-- `src/alfred/` contains **only** Alfred SDK helpers — no application logic.
-- Commands call services. Services call clients. Never skip layers.
-- All `output()` calls go through `alfred.response.output()`.
-- Always wrap `main()` in `safe_run()` — unhandled exceptions = blank Alfred.
+- `cmd/note-md-template-alfred/main.go` is the only file Alfred's Script Filter node executes. No business logic here — it dispatches to `internal/templatelist` and writes the response.
+- `cmd/note-md-template-paste-alfred/main.go` is the only file Alfred's Run Script action node executes. It parses the selected template and plays it via `internal/paste`.
+- `internal/` packages never depend on Alfred environment variables directly except where documented (`internal/templatelist` reads `templates_dir`).
+- All Script Filter output goes through `internal/scriptfilter.Response.Write()`.
+- `main()` in both binaries wraps its logic so an unhandled panic still produces visible output, not a blank Alfred result (see `note-md-template-alfred`'s `dispatch`).
 
 ## Testing rules
 
-- Test `src/app/` (commands, services, clients) — these are pure Python.
-- Mock external API calls in `ApiClient`. Never make real HTTP calls in tests.
-- `conftest.py` sets Alfred env vars to tmp dirs automatically.
-- `alfred/` SDK helpers are tested in `tests/test_alfred.py`.
+- Test `internal/mdtemplate`, `internal/templatelist`, and `internal/paste` — pure logic, no real Alfred environment needed.
+- `internal/clipboard` tests exercise the real macOS pasteboard (`pbcopy`/`pbpaste`, `osascript`); they skip themselves outside macOS.
+- `internal/paste` is tested via injected `Clipboard`/`Keyboard` interfaces — never invoke `osascript` from a test.
 
 ## Performance target
 
-Script Filter response < 100ms.
-Use `alfred.cache.Cache` for any network calls.
-Cache TTL default: 300s (5 min).
+Script Filter response < 100ms. A compiled binary meets this with room to spare; avoid adding I/O to the hot path (`internal/templatelist.List`) beyond the one `os.ReadDir` call.
 
 ## Dependency management
 
-Runtime dependencies → `vendor-requirements.txt` → vendored into `workflow/vendor/`
-Dev dependencies → `pyproject.toml [project.optional-dependencies.dev]`
-
-Keep runtime deps minimal. Every package adds to workflow size.
+Keep `go.mod` dependency-free unless a third-party package is clearly justified. Every dependency adds to workflow size and startup time.
 
 ## Pre-coding checklist
 

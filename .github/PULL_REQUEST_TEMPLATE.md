@@ -10,13 +10,12 @@
 ## Checklist
 
 - [ ] `make lint` passes
-- [ ] `make typecheck` passes
 - [ ] `make test` passes
-- [ ] `make build` succeeds
-- [ ] New commands have tests
+- [ ] `make build-workflow` succeeds
+- [ ] New behavior has tests
 - [ ] `docs/usage.md` updated if user-facing changes
 - [ ] `CHANGELOG.md` entry added under `[Unreleased]`
-- [ ] Tested manually in Alfred (`make run Q="..."`) if applicable
+- [ ] Tested manually in Alfred (`go run ./cmd/note-md-template-alfred "..."`) if applicable
 
 ## Notes
 

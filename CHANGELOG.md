@@ -7,18 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Rewrote the implementation from Python to Go (#30). The workflow now
+  packages two universal (amd64+arm64) binaries
+  (`note-md-template-alfred`, `note-md-template-paste-alfred`) instead of a
+  vendored Python runtime; no user-facing behavior change. See
+  `docs/decisions/0001-go-reimplementation.md`.
+- Dropped the unused generic scaffold commands inherited from
+  `alfred-workflow-template` (`search`, `open`, `config`, `help`) — they
+  were never wired into this workflow's Alfred package.
+
 ## [0.1.0] - 2024-01-01
 
 ### Added
 
-- Initial release of the Alfred Workflow Template
-- Alfred SDK: `response`, `cache`, `config`, `logger`, `router`, `safe_run`
-- Command-based UX: `search`, `open`, `config`, `help`
-- Vendor packaging via `scripts/vendor.sh`
-- Build pipeline via `scripts/build.sh`
+- Initial release, based on the `alfred-workflow-template` Python scaffold
+- `note` command: list and filter `.md` templates for note.com paste
 - GitHub Actions CI (lint, test, build)
 - GitHub Actions Release (tag → `.alfredworkflow` → GitHub Release)
-- Full pytest test suite
 
-[Unreleased]: https://github.com/yourname/alfred-workflow-template/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/yourname/alfred-workflow-template/releases/tag/v0.1.0
+[Unreleased]: https://github.com/y-marui/alfred-note-md-template/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/y-marui/alfred-note-md-template/releases/tag/v0.1.0

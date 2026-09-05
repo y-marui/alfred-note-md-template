@@ -1,10 +1,9 @@
-# Alfred Workflow Template
+# alfred-note-md-template
 
 > **これは日本語版（正本）です。**
 > 英語版（参照）は [README.md](README.md) を参照してください。
 
-> Alfred 5 Script Filter ワークフローのプロダクションレディなテンプレート。
-> 10分で開発を開始できます。
+> Markdown テンプレート（画像・キャプション込み）を Alfred から note.com のエディタへ貼り付けます。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CI](https://github.com/y-marui/alfred-note-md-template/actions/workflows/ci.yml/badge.svg)](https://github.com/y-marui/alfred-note-md-template/actions/workflows/ci.yml)
@@ -16,110 +15,70 @@
 |---|---|
 | 開発対象 | Alfred 5 Script Filter ワークフロー |
 | 開発環境 | 個人〜小規模チーム（1〜3人） |
-| 主言語 | 英語（OSS） |
+| 実装言語 | Go（サードパーティ依存なし） |
 | ライセンス | MIT |
 | AI ツール | Claude Code / GitHub Copilot / Gemini CLI |
 
-Python で Alfred 5 Script Filter ワークフローを作るためのテンプレート。個人〜小規模チーム（1〜3人）向け。
+## What it does
 
-## Setup (note.com template paste)
-
-このワークフローは macOS クリップボードへの画像書き込みに `pyobjc-framework-Cocoa` が必要です。
-デフォルトでは [uv](https://docs.astral.sh/uv/) を使って自動インストールするため、
-グローバルな `pip install` は不要です。
-
-### Option A — uv (default)
-
-1. [uv](https://docs.astral.sh/uv/getting-started/installation/) をインストール:
-   ```bash
-   curl -LsSf https://astral.sh/uv/install.sh | sh
-   ```
-2. Alfred Preferences でこのワークフローを開き、**Configure Workflow** をクリック。
-   **Use uv if available** はデフォルトでチェック済み — そのままにしてください。
-
-### Option B — global pip
-
-1. システムの Python にインストール:
-   ```bash
-   pip3 install pyobjc-framework-Cocoa
-   ```
-2. Alfred Preferences でこのワークフローを開き、**Configure Workflow** をクリックして
-   **Use uv if available** のチェックを外してください。
-
-### Templates directory
-
-**Configure Workflow** の **Templates Directory** に `.md` テンプレートを置くフォルダのパスを設定してください
-（デフォルト: `~/Documents/Note Templates`）。
-
-テンプレート形式 — 標準 Markdown の画像記法をそのまま使えます:
+note.com の記事テンプレートをローカルの `.md` ファイルとして管理できます —
+画像とイタリック体のキャプションは標準 Markdown 記法で書けます。Alfred で
+`note` と入力してテンプレートを選ぶと、テキスト・各画像・キャプションの順に
+note.com のエディタへブロックごとに貼り付けます。
 
 ```markdown
-# 記事タイトル
-
 はじめにのテキスト。
 
-![画像キャプション](./images/photo.png)
+![キャプション](./images/photo.png)
 
-画像の後のテキスト。
+*この画像のキャプションです。*
+
+続きのテキスト。
 ```
+
+## Setup
+
+1. `.md` テンプレートをフォルダに置きます（デフォルト: `~/Documents/Note Templates`）。
+2. デフォルト以外を使う場合は、Alfred Preferences でこのワークフローを開き
+   **Configure Workflow** から **Templates Directory** を設定します。
+3. ブラウザで note.com のエディタを開きます。
+4. Alfred で `note` と入力し、テンプレートを選んで Enter を押します。
+
+インタプリタやサードパーティランタイムのインストールは不要です — ワークフローは
+単一のコンパイル済みバイナリとして配布されます。
+
+初回のペースト時に、macOS が Alfred への Accessibility 権限の許可を求める
+ことがあります（Cmd+V / Return のキー操作をシミュレートするために必要）。
+詳細とトラブルシューティングは [docs/usage.md](docs/usage.md) を参照してください。
 
 ## Features
 
-- ✅ **レイヤードアーキテクチャ** — Alfred 境界とビジネスロジックを分離
-- ✅ **軽量 Alfred SDK** — レスポンスビルダー、ルーター、キャッシュ、設定、ロガー
-- ✅ **コマンドベース UX** — `wf search`、`wf open`、`wf config`、`wf help`
-- ✅ **フルテストスイート** — pytest で Alfred なしにテスト実行可能
-- ✅ **CI/CD** — GitHub Actions でリント・テスト・ビルド・リリースを自動化
-- ✅ **ベンダーパッケージング** — サードパーティ依存を `vendor/` にバンドル
-- ✅ **AI 対応** — `AI_CONTEXT.md` + `CLAUDE.md` で AI アシスタントのコンテキストを管理
+- 単一の静的 Go バイナリ — ランタイムのベンダリング不要、インタプリタの起動コストなし
+- Universal（amd64+arm64）ビルド — Intel / Apple Silicon の両方でネイティブ動作
+- フルテストスイート — `go test` で Alfred なしにテスト実行可能
+- CI/CD — GitHub Actions でリント・テスト・ビルド・リリースを自動化
+- AI 対応 — `AI_CONTEXT.md` + `CLAUDE.md` で AI アシスタントのコンテキストを管理
 
 ## Requirements
 
 - Alfred 5（Script Filter には Powerpack が必要）
-- Python 3.9+
-- [pre-commit](https://pre-commit.com/)（セキュリティフック用）
-
-## Quick Start (use this template)
-
-1. GitHub の **Use this template** ボタンをクリックしてリポジトリを作成します。
-2. 作成したリポジトリをクローン:
-   ```bash
-   git clone https://github.com/yourname/your-workflow-name
-   cd your-workflow-name
-   ```
-3. README テンプレートファイルをリネーム:
-   ```bash
-   mv README_TEMPLATE.md README.md
-   mv README_TEMPLATE-jp.md README-jp.md
-   ```
-4. `README.md` / `README-jp.md` のプレースホルダを置換:
-   - `{user}` / `{repo}` / `{workflow}` → GitHub ユーザー名・リポジトリ名・CI ワークフローファイル名
-   - `[USERNAME]` → GitHub ユーザー名
-   - `[BMC_USERNAME]` → Buy Me a Coffee のユーザー名
-5. `LICENSE` を更新（`[YEAR]`、`[AUTHOR]`）。
-6. `workflow/info.plist` を編集:
-   - `bundleid` を自分のバンドル ID に変更（例: `com.yourname.workflowname`）
-   - キーワード（`wf`）を自分のトリガーキーワードに変更
+- macOS（クリップボードと `osascript` によるキー操作シミュレーションに必要）
 
 ## Quick Start (developers)
 
 ```bash
-git clone https://github.com/yourname/alfred-workflow-template
-cd alfred-workflow-template
+git clone https://github.com/y-marui/alfred-note-md-template
+cd alfred-note-md-template
 
-# 開発用依存関係をインストール
-make install
-
-# Alfred をローカルでシミュレート
-make run Q="search foo"
-make run Q="help"
+# Script Filter をローカルでシミュレート
+templates_dir=~/Documents/Note\ Templates go run ./cmd/note-md-template-alfred ""
 
 # テストを実行
 make test
 
 # ワークフローパッケージをビルド
-make build
-# → dist/workflow-template-0.1.0.alfredworkflow
+make build-workflow
+# → dist/note.com-template-paste-<version>.alfredworkflow
 ```
 
 `dist/*.alfredworkflow` をダブルクリックして Alfred にインストールします。
@@ -127,37 +86,43 @@ make build
 ## Usage
 
 ```
-wf <query>           検索（デフォルト）
-wf search <query>    検索
-wf open <name>       ショートカットを開く
-wf config            設定の確認 / リセット
-wf help              コマンド一覧を表示
+note              テンプレート一覧を表示
+note <query>      名前でテンプレートを絞り込む
 ```
+
+詳しい使い方は [docs/usage.md](docs/usage.md) を参照してください。
 
 ## Project Structure
 
 ```
-alfred-workflow-template/
-├── src/
-│   ├── alfred/         # Alfred SDK (response, router, cache, config, logger, safe_run)
-│   └── app/            # アプリケーション層 (commands, services, clients)
-├── workflow/           # Alfred パッケージ (info.plist, scripts/entry.py, vendor/)
-├── tests/              # pytest テストスイート
-├── scripts/            # build.sh, dev.sh, release.sh, vendor.sh
-└── docs/               # アーキテクチャ・開発・利用ドキュメント
+alfred-note-md-template/
+├── cmd/
+│   ├── note-md-template-alfred/       # Script Filter バイナリ
+│   └── note-md-template-paste-alfred/ # Run Script アクションバイナリ
+├── internal/
+│   ├── mdtemplate/     # Markdown テンプレート → ブロックパーサー
+│   ├── templatelist/   # テンプレート一覧・絞り込み
+│   ├── paste/          # ブロックごとのペースト順序制御
+│   ├── clipboard/      # クリップボード書き込み (pbcopy / osascript)
+│   ├── keystroke/       # Cmd+V / Return のシミュレーション
+│   └── scriptfilter/   # Alfred Script Filter JSON 型
+├── workflow/           # Alfred パッケージ (info.plist, icon.png)
+├── scripts/            # build-workflow.sh, extract-changelog.sh
+└── docs/               # アーキテクチャ・利用ドキュメント
 ```
 
 ## Documentation
 
 | ドキュメント | 内容 |
 |---|---|
+| [DEVELOPING.md](DEVELOPING.md) | 開発フロー・命名規則・コードレビュー |
 | [docs/architecture.md](docs/architecture.md) | アーキテクチャ全体設計 |
-| [docs/development.md](docs/development.md) | コマンド追加・依存関係管理・リリース手順 |
 | [docs/usage.md](docs/usage.md) | エンドユーザー向け利用ガイド |
+| [docs/decisions/](docs/decisions/) | アーキテクチャ決定記録 (ADR) |
 
 ## AI-Assisted Development
 
-このテンプレートは AI 支援開発に対応しています。
+このプロジェクトは AI 支援開発に対応しています。
 
 | ツール | 役割 |
 |---|---|
@@ -167,21 +132,10 @@ alfred-workflow-template/
 
 セッションコンテキスト: [`AI_CONTEXT.md`](AI_CONTEXT.md)、[`CLAUDE.md`](CLAUDE.md)
 
-## Customizing this template
-
-1. `workflow/info.plist` を編集:
-   - `bundleid` を自分のバンドル ID に変更（例: `com.yourname.workflowname`）
-   - キーワード（`wf`）を自分のトリガーキーワードに変更
-   - `uuidgen` で生成した UUID に置き換え
-2. `src/app/clients/api_client.py` を実際の API クライアントに置き換え
-3. `pyproject.toml` のワークフロー名を更新
-4. `src/app/commands/open_cmd.py` のショートカットを更新
-5. `workflow/icon.png` を追加
-
 ## Release
 
 ```bash
-# 1. pyproject.toml のバージョンを更新
+# 1. workflow/info.plist のバージョンを更新
 # 2. タグを付けてプッシュ
 git tag v1.2.3
 git push --tags
