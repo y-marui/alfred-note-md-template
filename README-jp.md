@@ -147,6 +147,10 @@ git push --tags
 # GitHub Actions が .alfredworkflow をビルドして GitHub Release を作成
 ```
 
+Actions が実行できない場合（課金・spending limit の問題等）は、`make release`
+でこのマシンから同じビルド・GitHub Release 作成を行える。タグの push・
+Release 作成の実行前にそれぞれ確認を挟む。
+
 ## License
 
 MIT — [LICENSE](LICENSE) を参照
