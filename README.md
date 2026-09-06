@@ -147,6 +147,11 @@ git push --tags
 # GitHub Actions builds .alfredworkflow and creates a GitHub Release
 ```
 
+If Actions can't run (e.g. a billing/spending-limit issue), `make release`
+builds the tag at HEAD and publishes the same GitHub Release from this
+machine instead, prompting for confirmation before pushing the tag or
+creating the release.
+
 ## License
 
 MIT — see [LICENSE](LICENSE)
