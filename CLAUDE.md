@@ -26,7 +26,7 @@ Script Filter response < 100ms. A compiled binary meets this with room to spare;
 
 ## Dependency management
 
-Keep `go.mod` dependency-free unless a third-party package is clearly justified. Every dependency adds to workflow size and startup time.
+Dependency policy (zero third-party deps by default) follows [`docs/dev-charter/topics/alfred/ALFRED_DEV_ENV.md`](docs/dev-charter/topics/alfred/ALFRED_DEV_ENV.md)'s "Dependency Policy" — not restated here.
 
 ## Pre-coding checklist
 
