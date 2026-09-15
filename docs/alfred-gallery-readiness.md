@@ -30,7 +30,7 @@ that submission is not blocked on our side whenever that step happens.
 | User Configuration over environment variables | ✅ N/A | Nothing today needs user-facing configuration |
 | English instructions in About/README | ✅ Done | `README.md` is the reference (English) version; `README-jp.md` is canonical |
 | README follows Gallery style guide | ✅ Done | `## Usage` opens with "via the `note` keyword" phrasing |
-| Screenshots (full Alfred window, shadow, no background) | ❌ Missing | No `images/` directory exists; needs a real Alfred window capture, which this repository's automation cannot produce. Tracked in [#35](https://github.com/y-marui/alfred-note-md-template/issues/35) |
+| Screenshots (full Alfred window, shadow, no background) | ✅ Done | `images/note.png`, real window capture (rounded corners + drop shadow, transparent background) |
 
 ## Out of scope here
 

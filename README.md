@@ -87,6 +87,8 @@ Double-click `dist/*.alfredworkflow` to install in Alfred.
 
 Search and paste note.com Markdown templates via the `note` keyword.
 
+![note keyword template list](images/note.png)
+
 ```
 note              list all templates
 note <query>      filter templates by name
