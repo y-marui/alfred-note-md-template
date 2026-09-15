@@ -87,6 +87,8 @@ make build-workflow
 
 `note` キーワードで note.com 用の Markdown テンプレートを検索してペーストします。
 
+![note キーワードのテンプレート一覧](images/note.png)
+
 ```
 note              テンプレート一覧を表示
 note <query>      名前でテンプレートを絞り込む
