@@ -17,7 +17,7 @@
 | Team size | Individual to small team (1–3 people) |
 | Language | Go, no third-party dependencies |
 | License | MIT |
-| AI tools | Claude Code / GitHub Copilot / Gemini CLI |
+| AI tools | Claude Code / GitHub Copilot |
 
 ## What it does
 
@@ -135,7 +135,6 @@ This project is configured for AI-assisted development.
 |---|---|
 | Claude Code | Architecture, large-scale changes, refactoring |
 | GitHub Copilot | Bug fixes, small implementation, unit tests |
-| Gemini CLI | Documentation management |
 
 See [`AI_CONTEXT.md`](AI_CONTEXT.md) and [`CLAUDE.md`](CLAUDE.md) for session context.
 
