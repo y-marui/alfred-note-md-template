@@ -17,7 +17,7 @@
 | 開発環境 | 個人〜小規模チーム（1〜3人） |
 | 実装言語 | Go（サードパーティ依存なし） |
 | ライセンス | MIT |
-| AI ツール | Claude Code / GitHub Copilot / Gemini CLI |
+| AI ツール | Claude Code / GitHub Copilot |
 
 ## What it does
 
@@ -135,7 +135,6 @@ alfred-note-md-template/
 |---|---|
 | Claude Code | アーキテクチャ設計・大規模変更・リファクタリング |
 | GitHub Copilot | バグ修正・細かな実装・単体テスト作成 |
-| Gemini CLI | ドキュメント管理 |
 
 セッションコンテキスト: [`AI_CONTEXT.md`](AI_CONTEXT.md)、[`CLAUDE.md`](CLAUDE.md)
 
