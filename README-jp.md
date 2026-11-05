@@ -1,15 +1,15 @@
 # alfred-note-md-template
 
-> **これは日本語版（正本）です。**
+> **このファイルは正本（日本語版）です。**
 > 英語版（参照）は [README.md](README.md) を参照してください。
-
-> Markdown テンプレート（画像・キャプション込み）を Alfred から note.com のエディタへ貼り付けます。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CI](https://github.com/y-marui/alfred-note-md-template/actions/workflows/ci.yml/badge.svg)](https://github.com/y-marui/alfred-note-md-template/actions/workflows/ci.yml)
 [![Charter Check](https://github.com/y-marui/alfred-note-md-template/actions/workflows/dev-charter-check.yml/badge.svg)](https://github.com/y-marui/alfred-note-md-template/actions/workflows/dev-charter-check.yml)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/y-marui?style=social)](https://github.com/sponsors/y-marui)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-yellow.svg)](https://www.buymeacoffee.com/y.marui)
+
+> Markdown テンプレート（画像・キャプション込み）を Alfred から note.com のエディタへ貼り付けます。
 
 | 項目 | 内容 |
 |---|---|
@@ -18,6 +18,11 @@
 | 実装言語 | Go（サードパーティ依存なし） |
 | ライセンス | MIT |
 | AI ツール | Claude Code / GitHub Copilot |
+
+## Requirements
+
+- Alfred 5（Script Filter には Powerpack が必要）
+- macOS（クリップボードと `osascript` によるキー操作シミュレーションに必要）
 
 ## What it does
 
@@ -59,11 +64,6 @@ note.com のエディタへブロックごとに貼り付けます。
 - CI/CD — GitHub Actions でリント・テスト・ビルド・リリースを自動化
 - AI 対応 — `AI_CONTEXT.md` + `CLAUDE.md` で AI アシスタントのコンテキストを管理
 
-## Requirements
-
-- Alfred 5（Script Filter には Powerpack が必要）
-- macOS（クリップボードと `osascript` によるキー操作シミュレーションに必要）
-
 ## Quick Start (developers)
 
 ```bash
@@ -83,19 +83,6 @@ make build-workflow
 
 `dist/*.alfredworkflow` をダブルクリックして Alfred にインストールします。
 
-## Usage
-
-`note` キーワードで note.com 用の Markdown テンプレートを検索してペーストします。
-
-![note キーワードのテンプレート一覧](images/note.png)
-
-```
-note              テンプレート一覧を表示
-note <query>      名前でテンプレートを絞り込む
-```
-
-詳しい使い方は [docs/usage.md](docs/usage.md) を参照してください。
-
 ## Project Structure
 
 ```
@@ -114,6 +101,19 @@ alfred-note-md-template/
 ├── scripts/            # build-workflow.sh, extract-changelog.sh
 └── docs/               # アーキテクチャ・利用ドキュメント
 ```
+
+## Usage
+
+`note` キーワードで note.com 用の Markdown テンプレートを検索してペーストします。
+
+![note キーワードのテンプレート一覧](images/note.png)
+
+```
+note              テンプレート一覧を表示
+note <query>      名前でテンプレートを絞り込む
+```
+
+詳しい使い方は [docs/usage.md](docs/usage.md) を参照してください。
 
 ## Documentation
 
@@ -157,5 +157,4 @@ Release 作成の実行前にそれぞれ確認を挟む。
 MIT — [LICENSE](LICENSE) を参照
 
 ---
-
 *この文書には英語版 [README.md](README.md) があります。編集時は同一コミットで更新してください。*
