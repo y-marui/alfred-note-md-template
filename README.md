@@ -1,15 +1,15 @@
 # alfred-note-md-template
 
-> **This is the English (reference) version.**
-> For the Japanese canonical version, see [README-jp.md](README-jp.md).
-
-> Paste Markdown templates — including images and captions — into note.com's editor from Alfred.
+> **This is the reference (English) version.**
+> The canonical (Japanese) version is [README-jp.md](README-jp.md).
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CI](https://github.com/y-marui/alfred-note-md-template/actions/workflows/ci.yml/badge.svg)](https://github.com/y-marui/alfred-note-md-template/actions/workflows/ci.yml)
 [![Charter Check](https://github.com/y-marui/alfred-note-md-template/actions/workflows/dev-charter-check.yml/badge.svg)](https://github.com/y-marui/alfred-note-md-template/actions/workflows/dev-charter-check.yml)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/y-marui?style=social)](https://github.com/sponsors/y-marui)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-yellow.svg)](https://www.buymeacoffee.com/y.marui)
+
+> Paste Markdown templates — including images and captions — into note.com's editor from Alfred.
 
 | Field | Value |
 |---|---|
@@ -18,6 +18,11 @@
 | Language | Go, no third-party dependencies |
 | License | MIT |
 | AI tools | Claude Code / GitHub Copilot |
+
+## Requirements
+
+- Alfred 5 (Powerpack required for Script Filter)
+- macOS (for the pasteboard and `osascript` keystroke automation)
 
 ## What it does
 
@@ -59,11 +64,6 @@ paste); see [docs/usage.md](docs/usage.md) for details and troubleshooting.
 - CI/CD — lint, test, build, and release via GitHub Actions
 - AI-ready — `AI_CONTEXT.md` + `CLAUDE.md` for AI assistant context
 
-## Requirements
-
-- Alfred 5 (Powerpack required for Script Filter)
-- macOS (for the pasteboard and `osascript` keystroke automation)
-
 ## Quick Start (developers)
 
 ```bash
@@ -83,19 +83,6 @@ make build-workflow
 
 Double-click `dist/*.alfredworkflow` to install in Alfred.
 
-## Usage
-
-Search and paste note.com Markdown templates via the `note` keyword.
-
-![note keyword template list](images/note.png)
-
-```
-note              list all templates
-note <query>      filter templates by name
-```
-
-See [docs/usage.md](docs/usage.md) for the full guide.
-
 ## Project Structure
 
 ```
@@ -114,6 +101,19 @@ alfred-note-md-template/
 ├── scripts/            # build-workflow.sh, extract-changelog.sh
 └── docs/               # Architecture and usage documentation
 ```
+
+## Usage
+
+Search and paste note.com Markdown templates via the `note` keyword.
+
+![note keyword template list](images/note.png)
+
+```
+note              list all templates
+note <query>      filter templates by name
+```
+
+See [docs/usage.md](docs/usage.md) for the full guide.
 
 ## Documentation
 
@@ -158,5 +158,4 @@ creating the release.
 MIT — see [LICENSE](LICENSE)
 
 ---
-
 *This document has a Japanese canonical version [README-jp.md](README-jp.md). Update both in the same commit when editing.*
